@@ -14,7 +14,7 @@ const sans = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL('https://dermafutura-expo-2027.coordinaciontecapita.chatgpt.site'),
   title: 'DermaFutura Expo 2027 — Ciencia, piel y futuro',
   description: 'Una nueva plataforma para conectar dermatología clínica, innovación, tecnología y cuidado integral.',
   openGraph: {
