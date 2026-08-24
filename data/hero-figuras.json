@@ -1,0 +1,8 @@
+[
+  { "id": "clinica", "name": "Dermatología clínica", "kicker": "Diagnóstico · Práctica", "description": "Conversaciones sobre diagnóstico, prevención y decisiones clínicas para la práctica contemporánea.", "image": "/images/concepto-clinica.png" },
+  { "id": "oncologia", "name": "Dermato-oncología", "kicker": "Prevención · Detección", "description": "Una mirada rigurosa a la prevención, detección temprana y evolución del conocimiento especializado.", "image": "/images/concepto-oncologia.png" },
+  { "id": "tricologia", "name": "Tricología", "kicker": "Cabello · Investigación", "description": "Ciencia capilar, nuevas aproximaciones diagnósticas y el futuro del cuidado del cabello y cuero cabelludo.", "image": "/images/concepto-tricologia.png" },
+  { "id": "estetica", "name": "Estética médica", "kicker": "Precisión · Criterio", "description": "Innovación estética con criterio médico, seguridad, armonía y una visión integral de cada paciente.", "image": "/images/concepto-estetica.png" },
+  { "id": "tecnologia", "name": "Tecnología", "kicker": "Dispositivos · Futuro", "description": "Herramientas, datos y nuevas interfaces que amplían la forma de observar, comprender y tratar la piel.", "image": "/images/concepto-tecnologia.png" },
+  { "id": "ciencia", "name": "Ciencia aplicada", "kicker": "Evidencia · Innovación", "description": "El puente entre investigación, industria y práctica para convertir evidencia en nuevas posibilidades.", "image": "/images/concepto-ciencia.png" }
+]

@@ -1,0 +1,7 @@
+[
+  { "id": "apertura", "type": "Apertura", "title": "La piel como territorio de futuro", "status": "Horario por confirmar" },
+  { "id": "conversaciones", "type": "Conversaciones", "title": "Clínica, evidencia y nuevas miradas", "status": "Participantes por confirmar" },
+  { "id": "laboratorio", "type": "Experiencia", "title": "Tecnología que se puede tocar", "status": "Formato por confirmar" },
+  { "id": "encuentro", "type": "Networking", "title": "Cruces entre ciencia e industria", "status": "Formato por confirmar" },
+  { "id": "cierre", "type": "Cierre", "title": "Lo que la dermatología puede imaginar", "status": "Horario por confirmar" }
+]
