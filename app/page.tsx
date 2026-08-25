@@ -1,7 +1,6 @@
 import areas from '../data/hero-figuras.json';
 import faq from '../data/faq.json';
 import programa from '../data/programa.json';
-import site from '../data/site.json';
 
 const pillars = [
   ['01', 'Ciencia que se siente', 'Conocimiento clínico convertido en decisiones claras, actuales y útiles.'],
@@ -30,11 +29,10 @@ export default function Home() {
       <section className="hero" id="inicio">
         <div className="hero-grain" aria-hidden="true" /><div className="hero-rule hero-rule-left" aria-hidden="true" /><div className="hero-rule hero-rule-right" aria-hidden="true" />
         <div className="hero-editorial shell">
-          <div className="hero-meta"><span>DermaFutura · México</span><span>Edición 01 / 2027</span></div>
           <div className="hero-word hero-word-one" aria-hidden="true">DERMA</div><div className="hero-word hero-word-two" aria-hidden="true">FUTURA</div>
-          <div className="hero-copy"><p className="eyebrow">Las voces de una nueva generación</p><h1>El futuro<br />también tiene<br /><em>piel.</em></h1><p className="hero-text">{site.tagline}</p><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
-          <div className="hero-cast" aria-label="Casting editorial conceptual de DermaFutura"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /><div className="cast-index" aria-hidden="true"><span>V</span><span>O</span><span>C</span><span>E</span><span>S</span></div><div className="cast-badge"><strong>06</strong><span>miradas<br />al futuro</span></div></div>
-          <div className="hero-footnote"><p>Casting visual conceptual · Mujeres adultas de 18–19 años · No son ponentes confirmadas</p><p><span /> {site.dateLabel} · {site.locationLabel}</p></div>
+          <div className="hero-copy"><h1>El futuro<br />también tiene<br /><em>piel.</em></h1><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
+          <div className="hero-cast" aria-label="Casting editorial conceptual de DermaFutura"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
+          <div className="hero-footnote"><p>Casting visual conceptual · No son ponentes confirmadas</p></div>
         </div>
       </section>
 
