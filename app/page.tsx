@@ -1,3 +1,4 @@
+import CongresoTickets from './components/CongresoTickets';
 import areas from '../data/hero-figuras.json';
 import faq from '../data/faq.json';
 import programa from '../data/programa.json';
@@ -54,7 +55,7 @@ export default function Home() {
 
       <section className="audience ink-section" id="publicos"><div className="audience-word" aria-hidden="true">FOR YOU</div><div className="shell audience-grid"><div className="audience-intro"><p className="section-tag mint">06 / Para quién</p><h2>PARA QUIENES<br />VEN MÁS ALLÁ<br /><em>DE LA SUPERFICIE.</em></h2></div><div className="audience-list">{audiences.map(([number,title,text])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section className="passes" id="pases"><div className="pass-editorial"><p className="section-tag">07 / Pases</p><h2>YOUR<br />ACCESS<br /><em>ERA.</em></h2><p>La experiencia de acceso está diseñada. Precios, beneficios y enlaces de pago aparecerán únicamente cuando sean oficiales.</p></div><div className="pass-card"><div className="pass-top"><span>DERMAFUTURA / 2027</span><span>GENERAL ACCESS</span></div><div className="pass-price"><small>Desde</small><strong>POR<br />CONFIRMAR</strong><span>MXN</span></div><ul><li>Acceso al programa científico</li><li>Zona de innovación</li><li>Experiencias y networking</li><li>Beneficios por anunciar</li></ul><button type="button" disabled>Venta disponible próximamente</button><p>Sin cobros activos · Sin precios inventados</p></div></section>
+      <section className="passes" id="pases"><div className="pass-editorial"><p className="section-tag">07 / Pases</p><h2>YOUR<br />ACCESS<br /><em>ERA.</em></h2><p>Elige tu ficha y asegura tu lugar en DermaFutura Expo 2027.</p></div><CongresoTickets /></section>
 
       <section className="venue paper-section" id="sede"><div className="venue-city" aria-hidden="true">MÉXICO</div><div className="shell venue-grid"><div><p className="section-tag">08 / Dónde y cuándo</p><h2>La próxima<br /><em>capital de la piel.</em></h2></div><div className="venue-card"><small>Destino</small><strong>Ciudad por confirmar</strong><small>Fecha</small><strong>2027 · Por confirmar</strong><p>La sede, mapa, hospedaje y recomendaciones de viaje ocuparán este espacio cuando exista información oficial.</p></div></div></section>
 

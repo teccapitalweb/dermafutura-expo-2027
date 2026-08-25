@@ -1,6 +1,9 @@
 {
-  "enabled": false,
+  "enabled": true,
   "currency": "MXN",
-  "items": [],
-  "note": "No habilitar precios ni enlaces de pago hasta que la empresa confirme condiciones comerciales y legales."
+  "items": [
+    { "id": "ficha1", "name": "Especial", "price": 1000 },
+    { "id": "ficha2", "name": "General", "price": 500 }
+  ],
+  "note": "Nombres y precios editables desde el panel admin (pestaña Congreso). Los valores reales de venta se leen en vivo desde Firestore/Stripe; estos son solo el respaldo inicial."
 }

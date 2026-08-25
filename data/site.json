@@ -4,6 +4,6 @@
   "dateLabel": "Fecha por confirmar",
   "locationLabel": "México",
   "heroMode": "areas",
-  "salesEnabled": false,
-  "registrationEnabled": false
+  "salesEnabled": true,
+  "registrationEnabled": true
 }
