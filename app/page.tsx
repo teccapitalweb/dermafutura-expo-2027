@@ -30,14 +30,14 @@ export default function Home() {
         <div className="hero-grain" aria-hidden="true" /><div className="hero-rule hero-rule-left" aria-hidden="true" /><div className="hero-rule hero-rule-right" aria-hidden="true" />
         <div className="hero-editorial shell">
           <div className="hero-word hero-word-one" aria-hidden="true">DERMA</div><div className="hero-word hero-word-two" aria-hidden="true">FUTURA</div>
-          <div className="hero-copy"><h1>El futuro<br />también tiene<br /><em>piel.</em></h1><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
+          <div className="hero-cta"><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
           <div className="hero-cast" aria-label="Casting editorial conceptual de DermaFutura"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
           <div className="hero-footnote"><p>Casting visual conceptual · No son ponentes confirmadas</p></div>
         </div>
       </section>
 
       <section className="opening paper-section" id="universo">
-        <div className="shell opening-grid"><p className="section-tag">01 / El encuentro</p><div className="opening-title"><span>NO ES SOLO</span><h2>UNA EXPO.</h2><em>Es la nueva<br />superficie de<br />la dermatología.</em></div><div className="opening-copy"><p>Una plataforma donde medicina, tecnología, cultura y nuevas generaciones dejan de vivir en mundos separados.</p><a className="text-link" href="#programa">Descubrir la experiencia <span>↗</span></a></div></div>
+        <div className="shell opening-grid"><p className="section-tag">01 / El manifiesto</p><div className="opening-title"><span>EL FUTURO</span><h2>TAMBIÉN</h2><em>TIENE PIEL.</em></div><div className="opening-copy"><p>Una plataforma donde medicina, tecnología, cultura y nuevas generaciones dejan de vivir en mundos separados.</p><a className="text-link" href="#programa">Descubrir la experiencia <span>↗</span></a></div></div>
         <div className="editorial-ribbon"><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span></div>
       </section>
 
