@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Manrope } from 'next/font/google';
+import { Bungee_Outline, Cormorant_Garamond, Manrope } from 'next/font/google';
 import './globals.css';
 
 const display = Cormorant_Garamond({
@@ -11,6 +11,12 @@ const display = Cormorant_Garamond({
 const sans = Manrope({
   variable: '--font-sans',
   subsets: ['latin'],
+});
+
+const outline = Bungee_Outline({
+  variable: '--font-outline',
+  subsets: ['latin'],
+  weight: '400',
 });
 
 export const metadata: Metadata = {
@@ -35,7 +41,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es-MX">
-      <body className={`${display.variable} ${sans.variable}`}>{children}</body>
+      <body className={`${display.variable} ${sans.variable} ${outline.variable}`}>{children}</body>
     </html>
   );
 }
