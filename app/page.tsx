@@ -51,41 +51,47 @@ export default function Home() {
 
       <section className="hero" id="inicio">
         <div className="hero-grain" aria-hidden="true" />
-        <div className="hero-grid shell">
+        <div className="hero-rule hero-rule-left" aria-hidden="true" />
+        <div className="hero-rule hero-rule-right" aria-hidden="true" />
+        <div className="hero-editorial shell">
+          <div className="hero-meta">
+            <span>DermaFutura · México</span>
+            <span>Edición 01 / 2027</span>
+          </div>
+
+          <div className="hero-word hero-word-one" aria-hidden="true">DERMA</div>
+          <div className="hero-word hero-word-two" aria-hidden="true">FUTURA</div>
+
           <div className="hero-copy">
-            <p className="eyebrow">Nueva plataforma dermatológica · México</p>
-            <h1>La piel es<br />nuestro <em>futuro.</em></h1>
+            <p className="eyebrow">Las voces de una nueva generación</p>
+            <h1>El futuro<br />también tiene<br /><em>piel.</em></h1>
             <p className="hero-text">{site.tagline}</p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#interes">Quiero recibir noticias</a>
-              <a className="button button-ghost" href="#temas">Explorar el universo</a>
+              <a className="button button-primary" href="#temas">Explorar las voces</a>
+              <a className="button button-ghost" href="#interes">Recibir noticias</a>
             </div>
-            <p className="status"><span /> {site.dateLabel} · {site.locationLabel}</p>
           </div>
 
-          <div className="derma-stage" aria-label="Representación 3D conceptual de DermaFutura">
-            <div className="orbit orbit-one" aria-hidden="true" />
-            <div className="orbit orbit-two" aria-hidden="true" />
-            <div className="halo" aria-hidden="true" />
+          <div className="hero-cast" aria-label="Casting editorial conceptual de DermaFutura">
+            <div className="cast-aura" aria-hidden="true" />
             <img
-              className="hero-art"
-              src="/images/hero-dermafutura.png"
-              alt="Escultura conceptual 3D que representa piel, ciencia y tecnología"
+              className="hero-cast-image"
+              src="/images/hero-cast-v3.png"
+              alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica"
               fetchPriority="high"
             />
-            {areas.slice(0, 4).map((area, index) => (
-              <div className={`hero-chip chip-${index + 1}`} key={area.id}>
-                <span>0{index + 1}</span>{area.name}
-              </div>
-            ))}
-            <p className="concept-note">Visual conceptual 3D · No representa a una ponente real</p>
+            <div className="cast-index" aria-hidden="true">
+              <span>V</span><span>O</span><span>C</span><span>E</span><span>S</span>
+            </div>
+            <div className="cast-badge"><strong>06</strong><span>miradas<br />al futuro</span></div>
+          </div>
+
+          <div className="hero-footnote">
+            <p>Casting visual conceptual · Mujeres adultas de 18–19 años · No son ponentes confirmadas</p>
+            <p><span /> {site.dateLabel} · {site.locationLabel}</p>
           </div>
         </div>
 
-        <div className="hero-marquee" aria-hidden="true">
-          <span>CIENCIA · PIEL · TECNOLOGÍA · FUTURO ·</span>
-          <span>CIENCIA · PIEL · TECNOLOGÍA · FUTURO ·</span>
-        </div>
         <a className="scroll-cue" href="#universo" aria-label="Continuar al universo DermaFutura">Desliza <i /></a>
       </section>
 
