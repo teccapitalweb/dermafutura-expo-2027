@@ -74,7 +74,7 @@ export default function CongresoTickets() {
         {cards.map((c) => (
           <div className="pass-card" key={c.key}>
             <div className="pass-top">
-              <span>DERMAFUTURA / 2027</span>
+              <span>BIO SKIN / 2026</span>
               <span>{c.nombre.toUpperCase()}</span>
             </div>
             <div className="pass-price">

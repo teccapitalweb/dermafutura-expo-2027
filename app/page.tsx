@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#inicio" aria-label="DermaFutura, inicio"><span className="brand-mark" aria-hidden="true">DF</span><span>DERMAFUTURA<small>EXPO 2027</small></span></a>
+        <a className="brand" href="#inicio" aria-label="BIO SKIN Congress, inicio"><img className="brand-logo" src="/images/logo-bioskin.jpeg" alt="BIO SKIN Congress 2026" /></a>
         <nav className="nav-links" aria-label="Navegación principal"><a href="#voces">Voces</a><a href="#programa">Programa</a><a href="#pases">Pases</a><a href="#sede">Sede</a></nav>
         <a className="nav-cta" href="#interes">Únete a la lista</a>
       </header>
@@ -30,9 +30,9 @@ export default function Home() {
       <section className="hero" id="inicio">
         <div className="hero-grain" aria-hidden="true" /><div className="hero-rule hero-rule-left" aria-hidden="true" /><div className="hero-rule hero-rule-right" aria-hidden="true" />
         <div className="hero-editorial shell">
-          <div className="hero-word hero-word-one" aria-hidden="true">DERMA</div><div className="hero-word hero-word-two" aria-hidden="true">FUTURA</div>
+          <div className="hero-word hero-word-one" aria-hidden="true">BIO</div><div className="hero-word hero-word-two" aria-hidden="true">SKIN</div>
           <div className="hero-cta"><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
-          <div className="hero-cast" aria-label="Casting editorial conceptual de DermaFutura"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
+          <div className="hero-cast" aria-label="Casting editorial conceptual de BIO SKIN Congress"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
           <div className="hero-footnote"><p>Casting visual conceptual · No son ponentes confirmadas</p></div>
         </div>
       </section>
@@ -44,7 +44,7 @@ export default function Home() {
 
       <section className="voices ink-section" id="voces">
         <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>La estructura está preparada para recibir fotografía, nombre, especialidad y tema de cada ponente confirmado. Por ahora presentamos el casting visual y las seis conversaciones que queremos abrir.</p></div>
-        <div className="shell voices-spread"><figure className="voices-poster"><span className="poster-label">The future issue · 2027</span><div className="poster-word" aria-hidden="true">VOICES</div><img src="/images/hero-cast-v3.png" alt="Casting conceptual de seis futuras voces de DermaFutura" loading="lazy" /><figcaption>Casting conceptual · Identidades reales por confirmar</figcaption></figure><div className="voice-list">{areas.map((area,index)=><article key={area.id}><span>0{index+1}</span><div><small>Voz por anunciar</small><h3>{area.name}</h3><p>{area.kicker}</p></div><i>↗</i></article>)}</div></div>
+        <div className="shell voices-spread"><figure className="voices-poster"><span className="poster-label">The future issue · 2026</span><div className="poster-word" aria-hidden="true">VOICES</div><img src="/images/hero-cast-v3.png" alt="Casting conceptual de seis futuras voces de BIO SKIN Congress" loading="lazy" /><figcaption>Casting conceptual · Identidades reales por confirmar</figcaption></figure><div className="voice-list">{areas.map((area,index)=><article key={area.id}><span>0{index+1}</span><div><small>Voz por anunciar</small><h3>{area.name}</h3><p>{area.kicker}</p></div><i>↗</i></article>)}</div></div>
       </section>
 
       <section className="runway paper-section" id="temas"><div className="shell runway-head"><p className="section-tag">03 / El universo</p><h2>SEIS MIRADAS.<br /><span>UNA MISMA PIEL.</span></h2></div><div className="runway-track">{areas.map((area,index)=><article className="runway-card" key={area.id}><div className={`runway-image real-person real-person-${index+1}`} role="img" aria-label={`Retrato editorial conceptual para ${area.name}`}><b>0{index+1}</b><small>Casting visual</small></div><h3>{area.name}</h3><p>{area.description}</p></article>)}</div><p className="runway-disclaimer shell">Retratos conceptuales generados para comunicar las áreas · No representan ponentes confirmados</p></section>
@@ -55,9 +55,9 @@ export default function Home() {
 
       <section className="audience ink-section" id="publicos"><div className="audience-word" aria-hidden="true">FOR YOU</div><div className="shell audience-grid"><div className="audience-intro"><p className="section-tag mint">06 / Para quién</p><h2>PARA QUIENES<br />VEN MÁS ALLÁ<br /><em>DE LA SUPERFICIE.</em></h2></div><div className="audience-list">{audiences.map(([number,title,text])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section className="passes" id="pases"><div className="pass-editorial"><p className="section-tag">07 / Pases</p><h2>YOUR<br />ACCESS<br /><em>ERA.</em></h2><p>Elige tu ficha y asegura tu lugar en DermaFutura Expo 2027.</p></div><CongresoTickets /></section>
+      <section className="passes" id="pases"><div className="pass-editorial"><p className="section-tag">07 / Pases</p><h2>YOUR<br />ACCESS<br /><em>ERA.</em></h2><p>Elige tu ficha y asegura tu lugar en BIO SKIN Congress 2026.</p></div><CongresoTickets /></section>
 
-      <section className="venue paper-section" id="sede"><div className="venue-city" aria-hidden="true">MÉXICO</div><div className="shell venue-grid"><div><p className="section-tag">08 / Dónde y cuándo</p><h2>La próxima<br /><em>capital de la piel.</em></h2></div><div className="venue-card"><small>Destino</small><strong>Ciudad por confirmar</strong><small>Fecha</small><strong>2027 · Por confirmar</strong><p>La sede, mapa, hospedaje y recomendaciones de viaje ocuparán este espacio cuando exista información oficial.</p></div></div></section>
+      <section className="venue paper-section" id="sede"><div className="venue-city" aria-hidden="true">MÉXICO</div><div className="shell venue-grid"><div><p className="section-tag">08 / Dónde y cuándo</p><h2>La próxima<br /><em>capital de la piel.</em></h2></div><div className="venue-card"><small>Destino</small><strong>Ciudad por confirmar</strong><small>Fecha</small><strong>2026 · Por confirmar</strong><p>La sede, mapa, hospedaje y recomendaciones de viaje ocuparán este espacio cuando exista información oficial.</p></div></div></section>
 
       <section className="partners ink-section" id="aliados"><div className="shell partners-head"><p className="section-tag mint">09 / Aliados</p><h2>QUIENES HARÁN<br /><em>POSIBLE EL FUTURO.</em></h2><p>Logotipos y categorías aparecerán únicamente con confirmación y autorización de uso.</p></div><div className="partner-grid shell">{['Presenting partner','Skin science','Medical technology','Beauty innovation','Academic partner','Experience partner'].map((name,index)=><div key={name}><span>0{index+1}</span><strong>{name}</strong><small>Espacio disponible</small></div>)}</div></section>
 
@@ -65,7 +65,7 @@ export default function Home() {
 
       <section className="faq paper-section" id="faq"><div className="shell faq-grid"><div><p className="section-tag">11 / Preguntas</p><h2>TODO CLARO.<br /><em>NADA INVENTADO.</em></h2></div><div className="faq-list">{faq.map(item=><details key={item.question}><summary>{item.question}<span>+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
 
-      <footer><div className="footer-word">DERMAFUTURA</div><div className="shell footer-bottom"><div className="brand"><span className="brand-mark">DF</span><span>DERMAFUTURA<small>EXPO 2027</small></span></div><p>Nombre, fecha, sede y contacto por confirmar.</p><a href="#inicio">Volver arriba ↑</a></div></footer>
+      <footer><div className="footer-word">BIO SKIN</div><div className="shell footer-bottom"><div className="brand"><img className="brand-logo brand-logo-footer" src="/images/logo-bioskin.jpeg" alt="BIO SKIN Congress 2026" /></div><p>Nombre, fecha, sede y contacto por confirmar.</p><a href="#inicio">Volver arriba ↑</a></div></footer>
     </main>
   );
 }
