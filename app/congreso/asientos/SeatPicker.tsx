@@ -33,6 +33,41 @@ const ZONA_POR_FICHA: Record<'ficha1' | 'ficha2', string> = {
   ficha2: 'general',
 };
 
+const ESPERA_MAXIMA_MS = 12000;
+
+async function obtenerJson<T>(url: string, init?: RequestInit, reintentos = 0): Promise<T> {
+  let ultimoError: unknown;
+
+  for (let intento = 0; intento <= reintentos; intento += 1) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), ESPERA_MAXIMA_MS);
+
+    try {
+      const respuesta = await fetch(url, {
+        ...init,
+        cache: 'no-store',
+        signal: controller.signal,
+      });
+
+      if (!respuesta.ok) {
+        const detalle = await respuesta.json().catch(() => ({})) as { error?: string };
+        throw new Error(detalle.error || `Error ${respuesta.status}`);
+      }
+
+      return await respuesta.json() as T;
+    } catch (error) {
+      ultimoError = error;
+      if (intento < reintentos) {
+        await new Promise((resolve) => window.setTimeout(resolve, 700));
+      }
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  }
+
+  throw ultimoError instanceof Error ? ultimoError : new Error('No fue posible conectar con la sala');
+}
+
 /*
   La URL de regreso a Stripe se calcula quitando "/congreso/asientos" del
   pathname actual — así funciona igual en los dos builds (GH Pages con
@@ -60,30 +95,37 @@ export default function SeatPicker() {
 
   useEffect(() => {
     if (!ficha) { router.replace('/#pases'); return; }
-    fetch(`${WEBHOOK_SERVER}/congreso/precios`)
-      .then((r) => (r.ok ? (r.json() as Promise<Fichas>) : null))
+    obtenerJson<Fichas>(`${WEBHOOK_SERVER}/congreso/precios`)
       .then((data) => { if (data && data.ficha1Nombre) setFichas(data); })
       .catch(() => {});
   }, [ficha, router]);
 
   const cargarAsientos = useCallback(async () => {
     setCargando(true);
+    setError('');
     try {
-      const res = await fetch(`${WEBHOOK_SERVER}/congreso/asientos`);
-      if (!res.ok) throw new Error();
-      const data: { layout: FilaLayout[]; asientos: Asiento[] } = await res.json();
+      const data = await obtenerJson<{ layout: FilaLayout[]; asientos: Asiento[] }>(
+        `${WEBHOOK_SERVER}/congreso/asientos`,
+        undefined,
+        1,
+      );
+      if (!Array.isArray(data.layout) || !Array.isArray(data.asientos)) throw new Error('Mapa incompleto');
       setLayout(data.layout);
       const mapa: Record<string, Asiento> = {};
       for (const a of data.asientos) mapa[a.id] = a;
       setAsientos(mapa);
     } catch {
-      setError('No se pudo cargar el mapa de asientos, intenta de nuevo');
+      setError('La sala tardó más de lo esperado. Puedes volver a intentarlo ahora.');
     } finally {
       setCargando(false);
     }
   }, []);
 
-  useEffect(() => { if (ficha) cargarAsientos(); }, [ficha, cargarAsientos]);
+  useEffect(() => {
+    if (!ficha) return;
+    const inicio = window.setTimeout(() => { void cargarAsientos(); }, 0);
+    return () => window.clearTimeout(inicio);
+  }, [ficha, cargarAsientos]);
 
   if (!ficha) return null; // se redirige en el useEffect de arriba
 
@@ -92,7 +134,7 @@ export default function SeatPicker() {
     setPagando(true);
     setError('');
     try {
-      const res = await fetch(`${WEBHOOK_SERVER}/create-checkout-session-congreso`, {
+      const data = await obtenerJson<{ url?: string; error?: string }>(`${WEBHOOK_SERVER}/create-checkout-session-congreso`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,18 +144,19 @@ export default function SeatPicker() {
           cancelUrl: urlHome('?congreso=canceled'),
         }),
       });
-      const data: { url?: string; error?: string } = await res.json();
-      if (res.status === 409) {
-        setSeleccionado(null);
-        setError(data.error || 'Ese asiento acaba de ocuparse, elige otro');
-        await cargarAsientos();
-        setPagando(false);
-        return;
-      }
-      if (!res.ok || !data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
+      if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
       window.location.href = data.url;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ocurrió un error, intenta de nuevo');
+      const mensaje = err instanceof Error ? err.message : 'Ocurrió un error, intenta de nuevo';
+      if (/ocup|reserv|409/i.test(mensaje)) {
+        setSeleccionado(null);
+        setError('Ese asiento acaba de ocuparse. Elige otro disponible.');
+        await cargarAsientos();
+      } else {
+        setError(mensaje === 'This operation was aborted'
+          ? 'Stripe tardó más de lo esperado. Tu asiento no fue cobrado; inténtalo de nuevo.'
+          : mensaje);
+      }
       setPagando(false);
     }
   }
@@ -135,8 +178,8 @@ export default function SeatPicker() {
           ←
         </button>
         <div className="seatpage-headinfo">
-          <p className="seatpage-tag">BIO SKIN Congress 2026 · Ficha {nombreFicha}</p>
-          <h1>Elige tu asiento</h1>
+          <p className="seatpage-tag">BIO SKIN Congress 2026 · Seat edition</p>
+          <h1>Elige tu vista</h1>
         </div>
         <div className="seatpage-progress" aria-label="Paso 1 de 2">
           <span className="is-active"><b>1</b>Asiento</span>
@@ -154,19 +197,30 @@ export default function SeatPicker() {
           <section className="seatmap-panel" aria-labelledby="seatmap-title">
             <div className="seatmap-panelhead">
               <div>
-                <p>Selección de ubicación</p>
+                <p>N° 01 / Selección de ubicación</p>
                 <h2 id="seatmap-title">Sala principal</h2>
               </div>
-              <span>Zona {nombreFicha}</span>
+              <span>{nombreFicha} · {zonaActiva === 'preferente' ? 'A—D' : 'E—J'}</span>
             </div>
 
             <div className="seatpage-stage-wrap" aria-hidden="true">
-              <div className="seatpage-stage"><span>ESCENARIO</span></div>
-              <small>Frente de la sala</small>
+              <div className="seatpage-stage"><span>RUNWAY / ESCENARIO</span></div>
+              <small>La mejor perspectiva comienza aquí</small>
             </div>
 
             {cargando ? (
-              <p className="seatpage-loading">Cargando mapa de asientos…</p>
+              <div className="seatpage-loading" role="status" aria-live="polite">
+                <span aria-hidden="true" />
+                <strong>Preparando la sala</strong>
+                <small>Estamos comprobando los lugares disponibles.</small>
+              </div>
+            ) : layout.length === 0 ? (
+              <div className="seatmap-empty" role="alert">
+                <span aria-hidden="true">!</span>
+                <h3>La sala no respondió</h3>
+                <p>Tu selección sigue intacta. Vuelve a cargar el mapa para continuar.</p>
+                <button type="button" onClick={cargarAsientos}>Volver a cargar</button>
+              </div>
             ) : (
               <div className="seatpage-rows">
                 {layout.map((f) => (
@@ -197,7 +251,7 @@ export default function SeatPicker() {
                             aria-label={`Asiento ${id} ${estado}`}
                             title={f.zona === 'ponente' ? 'Reservado para ponentes' : `${id} · ${estado}`}
                           >
-                            {i + 1}
+                            <span className="seat-chair" aria-hidden="true"><i>{i + 1}</i></span>
                           </button>
                         );
                       })}
@@ -215,11 +269,11 @@ export default function SeatPicker() {
               <span><i className="seat-demo demo-otra" /> Otra zona</span>
             </div>
 
-            {error && <p className="seatmap-error">{error}</p>}
+            {error && layout.length > 0 && <p className="seatmap-error">{error}</p>}
           </section>
 
           <aside className="seatpage-summary" aria-live="polite">
-            <p className="seatpage-summary-tag">Tu reservación</p>
+            <p className="seatpage-summary-tag">N° 02 / Tu reservación</p>
             <h2>Ficha {nombreFicha}</h2>
             <p className="seatpage-summary-zone">{zonaDescripcion}</p>
 
@@ -235,7 +289,7 @@ export default function SeatPicker() {
             </dl>
 
             <div className="seatpage-secure">
-              <span aria-hidden="true">✓</span>
+              <span aria-hidden="true">S</span>
               <p><strong>Pago protegido por Stripe</strong><small>Tu asiento se confirma al completar el pago.</small></p>
             </div>
           </aside>

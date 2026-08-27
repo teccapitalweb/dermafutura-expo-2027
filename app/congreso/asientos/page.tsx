@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function AsientosPage() {
   return (
-    <Suspense fallback={<div className="seatpage-loading">Cargando…</div>}>
+    <Suspense fallback={<main className="seatpage seatpage-route-loading"><div className="seatpage-loading"><span /><strong>Abriendo la sala</strong><small>Un momento, por favor.</small></div></main>}>
       <SeatPicker />
     </Suspense>
   );
