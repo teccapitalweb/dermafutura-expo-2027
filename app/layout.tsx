@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Bungee_Outline, Cormorant_Garamond, Manrope } from 'next/font/google';
+import { Bungee_Outline, Manrope, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
-const display = Cormorant_Garamond({
+const display = Space_Grotesk({
   variable: '--font-display',
   subsets: ['latin'],
   weight: ['500', '600', '700'],

@@ -10,7 +10,7 @@ img { display:block; max-width:100%; }
 .shell { width:min(100% - 80px,1460px); margin-inline:auto; }
 .paper-section { background:var(--ivory); color:var(--ink); }
 .ink-section { background:var(--ink); color:var(--ivory); }
-em { color:var(--rose); font-weight:500; }
+em { color:var(--rose); font-style:normal; font-weight:600; }
 .paper-section em { color:var(--rose-deep); }
 .section-tag { margin:0; color:var(--berry); font-size:9px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
 .section-tag.mint { color:var(--mint); }
