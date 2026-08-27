@@ -33,6 +33,8 @@ em { color:var(--rose); font-weight:500; }
 .hero-editorial { position:relative; z-index:3; min-height:100svh; padding-block:105px 70px; isolation:isolate; }
 .hero-word { position:absolute; z-index:1; left:0; color:var(--ivory); font-size:clamp(126px,17.1vw,285px); font-weight:800; letter-spacing:-.085em; line-height:.72; text-transform:uppercase; white-space:nowrap; }
 .hero-word-one { top:22%; } .hero-word-two { top:49%; color:rgba(251,246,241,.86); font-family:var(--font-outline),sans-serif; font-weight:400; letter-spacing:-.035em; }
+.hero-word-three { z-index:10; bottom:150px; left:2px; color:var(--ivory); font-family:var(--font-sans),sans-serif; font-size:clamp(27px,3.15vw,50px); font-weight:800; letter-spacing:.11em; line-height:1; text-shadow:0 5px 24px rgba(0,0,0,.9); }
+.hero-word-three span { color:var(--mint); }
 .hero-cta { position:absolute; z-index:12; bottom:82px; left:0; }
 .hero-actions { display:flex; flex-wrap:wrap; gap:11px; }
 .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:0 21px; border-radius:999px; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
@@ -213,6 +215,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
   .shell { width:min(100% - 36px,1460px); }.site-header { top:10px; width:calc(100% - 24px); padding:11px 13px; }.nav-cta { display:none; }
   .hero { min-height:max(800px,100svh); }.hero-editorial { min-height:max(800px,100svh); padding-top:110px; }
   .hero-word { left:-3px; font-size:clamp(82px,28vw,118px); letter-spacing:-.095em; }.hero-word-one { top:20%; }.hero-word-two { top:31%; -webkit-text-stroke-width:1px; }
+  .hero-word-three { top:46%; bottom:auto; left:0; font-size:clamp(18px,5.3vw,23px); letter-spacing:.1em; }
   .hero-cta { right:0; bottom:37%; }.hero-actions { flex-wrap:nowrap; }.hero-actions .button { flex:1; min-height:47px; padding-inline:9px; font-size:7px; }.hero-cast { top:auto; right:-5vw; bottom:3.5%; width:110vw; height:36%; }
   .hero-footnote { bottom:0; padding:10px 86px 10px 8px; background:rgba(12,7,10,.76); font-size:6px; line-height:1.5; }
   .opening,.voices,.runway,.pillars,.program,.audience,.venue,.partners,.interest,.faq { padding-block:95px; }

@@ -30,7 +30,7 @@ export default function Home() {
       <section className="hero" id="inicio">
         <div className="hero-grain" aria-hidden="true" /><div className="hero-rule hero-rule-left" aria-hidden="true" /><div className="hero-rule hero-rule-right" aria-hidden="true" />
         <div className="hero-editorial shell">
-          <div className="hero-word hero-word-one" aria-hidden="true">BIO</div><div className="hero-word hero-word-two" aria-hidden="true">SKIN</div>
+          <div className="hero-word hero-word-one" aria-hidden="true">BIO</div><div className="hero-word hero-word-two" aria-hidden="true">SKIN</div><div className="hero-word hero-word-three" aria-label="BIO SKIN Congress 2026">CONGRESS <span>2026</span></div>
           <div className="hero-cta"><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
           <div className="hero-cast" aria-label="Casting editorial conceptual de BIO SKIN Congress"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
           <div className="hero-footnote"><p>Casting visual conceptual · No son ponentes confirmadas</p></div>
