@@ -6,22 +6,27 @@ import type { NextConfig } from 'next';
 const isGithubPages = process.env.GH_PAGES === '1';
 
 /*
-  El sitio ahora se sirve con dominio propio (congreso.dermalyssemx.com, ver
-  public/CNAME) — GitHub Pages sirve un dominio propio en la RAÍZ, no bajo
-  /dermafutura-expo-2027/. Por eso ya NO se usa basePath/assetPrefix: con el
-  dominio propio, cualquier prefijo aquí rompe todas las rutas de imágenes,
-  CSS y JS (404 en todo menos el index).
+  Por default (GH_PAGES=1 solo) el build sigue usando basePath
+  /dermafutura-expo-2027 — así es como vive HOY en
+  teccapitalweb.github.io/dermafutura-expo-2027/. Este es el modo SEGURO,
+  no rompe el sitio actual.
 
-  Si en algún momento hace falta volver a servir SOLO en
-  teccapitalweb.github.io/dermafutura-expo-2027 (sin dominio propio, p. ej.
-  para probar antes de activar el DNS), agrega de nuevo basePath/assetPrefix
-  aquí y en scripts/build-gh-pages.mjs.
+  Solo cuando el dominio propio (congreso.dermalyssemx.com) ya esté
+  confirmado y activo en GitHub → Settings → Pages, se agrega TAMBIÉN
+  GH_PAGES_CUSTOM_DOMAIN=1 al build. Un dominio propio sirve en la RAÍZ,
+  así que ahí SÍ hay que quitar el basePath — pero nunca antes de tener el
+  dominio funcionando, o se rompe el sitio como acaba de pasar.
 */
+const useCustomDomain = process.env.GH_PAGES_CUSTOM_DOMAIN === '1';
+
 const nextConfig: NextConfig = isGithubPages
   ? {
       output: 'export',
       images: { unoptimized: true },
       trailingSlash: true,
+      ...(useCustomDomain
+        ? {}
+        : { basePath: '/dermafutura-expo-2027', assetPrefix: '/dermafutura-expo-2027' }),
     }
   : {};
 
