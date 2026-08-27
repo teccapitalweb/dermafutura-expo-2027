@@ -20,6 +20,8 @@ type Asiento = {
   zona: 'ponente' | 'preferente' | 'general';
   estado: 'libre' | 'ocupado' | 'reservado';
 };
+type MapaSala = { layout: FilaLayout[]; asientos: Asiento[] };
+type CacheSala = MapaSala & { guardadoEn: number };
 
 const FALLBACK: Fichas = {
   ficha1Nombre: 'Preferente',
@@ -32,6 +34,14 @@ const ZONA_POR_FICHA: Record<'ficha1' | 'ficha2', string> = {
   ficha1: 'preferente',
   ficha2: 'general',
 };
+
+const LAYOUT_INICIAL: FilaLayout[] = [
+  { fila: 'P', asientos: 8, zona: 'ponente' },
+  ...['A', 'B', 'C', 'D'].map((fila) => ({ fila, asientos: 10, zona: 'preferente' })),
+  ...['E', 'F', 'G', 'H', 'I', 'J'].map((fila) => ({ fila, asientos: 10, zona: 'general' })),
+];
+const CACHE_SALA = 'bioskin-congress-seatmap-v2';
+const VIGENCIA_CACHE_MS = 90_000;
 
 const ESPERA_MAXIMA_MS = 12000;
 
@@ -86,9 +96,10 @@ export default function SeatPicker() {
   const ficha: 'ficha1' | 'ficha2' | null = fichaParam === 'ficha1' || fichaParam === 'ficha2' ? fichaParam : null;
 
   const [fichas, setFichas] = useState<Fichas>(FALLBACK);
-  const [layout, setLayout] = useState<FilaLayout[]>([]);
+  const [layout, setLayout] = useState<FilaLayout[]>(LAYOUT_INICIAL);
   const [asientos, setAsientos] = useState<Record<string, Asiento>>({});
   const [cargando, setCargando] = useState(true);
+  const [sincronizado, setSincronizado] = useState(false);
   const [seleccionado, setSeleccionado] = useState<string | null>(null);
   const [pagando, setPagando] = useState(false);
   const [error, setError] = useState('');
@@ -100,11 +111,13 @@ export default function SeatPicker() {
       .catch(() => {});
   }, [ficha, router]);
 
-  const cargarAsientos = useCallback(async () => {
-    setCargando(true);
-    setError('');
+  const cargarAsientos = useCallback(async (silencioso = false) => {
+    if (!silencioso) {
+      setCargando(true);
+      setError('');
+    }
     try {
-      const data = await obtenerJson<{ layout: FilaLayout[]; asientos: Asiento[] }>(
+      const data = await obtenerJson<MapaSala>(
         `${WEBHOOK_SERVER}/congreso/asientos`,
         undefined,
         1,
@@ -114,16 +127,36 @@ export default function SeatPicker() {
       const mapa: Record<string, Asiento> = {};
       for (const a of data.asientos) mapa[a.id] = a;
       setAsientos(mapa);
+      setSincronizado(true);
+      setError('');
+      sessionStorage.setItem(CACHE_SALA, JSON.stringify({ ...data, guardadoEn: Date.now() } satisfies CacheSala));
     } catch {
-      setError('La sala tardó más de lo esperado. Puedes volver a intentarlo ahora.');
+      if (!silencioso) setError('No pudimos confirmar la disponibilidad. Vuelve a sincronizar la sala.');
     } finally {
-      setCargando(false);
+      if (!silencioso) setCargando(false);
     }
   }, []);
 
   useEffect(() => {
     if (!ficha) return;
-    const inicio = window.setTimeout(() => { void cargarAsientos(); }, 0);
+    const inicio = window.setTimeout(() => {
+      let cacheValida = false;
+      try {
+        const cache = JSON.parse(sessionStorage.getItem(CACHE_SALA) || 'null') as CacheSala | null;
+        if (cache && Date.now() - cache.guardadoEn < VIGENCIA_CACHE_MS && Array.isArray(cache.layout) && Array.isArray(cache.asientos)) {
+          const mapa: Record<string, Asiento> = {};
+          for (const asiento of cache.asientos) mapa[asiento.id] = asiento;
+          setLayout(cache.layout);
+          setAsientos(mapa);
+          setSincronizado(true);
+          setCargando(false);
+          cacheValida = true;
+        }
+      } catch {
+        sessionStorage.removeItem(CACHE_SALA);
+      }
+      void cargarAsientos(cacheValida);
+    }, 0);
     return () => window.clearTimeout(inicio);
   }, [ficha, cargarAsientos]);
 
@@ -208,13 +241,14 @@ export default function SeatPicker() {
               <small>La mejor perspectiva comienza aquí</small>
             </div>
 
-            {cargando ? (
-              <div className="seatpage-loading" role="status" aria-live="polite">
+            {cargando && !sincronizado && (
+              <div className="seatmap-sync" role="status" aria-live="polite">
                 <span aria-hidden="true" />
-                <strong>Preparando la sala</strong>
-                <small>Estamos comprobando los lugares disponibles.</small>
+                Confirmando disponibilidad en tiempo real
               </div>
-            ) : layout.length === 0 ? (
+            )}
+
+            {layout.length === 0 ? (
               <div className="seatmap-empty" role="alert">
                 <span aria-hidden="true">!</span>
                 <h3>La sala no respondió</h3>
@@ -232,7 +266,7 @@ export default function SeatPicker() {
                         const a = asientos[id];
                         const estado = a?.estado ?? 'libre';
                         const esDeMiZona = f.zona === zonaActiva;
-                        const clicable = esDeMiZona && estado === 'libre' && !pagando;
+                        const clicable = sincronizado && esDeMiZona && estado === 'libre' && !pagando;
                         const clases = [
                           'seat',
                           `seat-${estado}`,
@@ -269,7 +303,12 @@ export default function SeatPicker() {
               <span><i className="seat-demo demo-otra" /> Otra zona</span>
             </div>
 
-            {error && layout.length > 0 && <p className="seatmap-error">{error}</p>}
+            {error && layout.length > 0 && (
+              <div className="seatmap-error" role="alert">
+                <span>{error}</span>
+                <button type="button" onClick={() => cargarAsientos()}>Sincronizar de nuevo</button>
+              </div>
+            )}
           </section>
 
           <aside className="seatpage-summary" aria-live="polite">

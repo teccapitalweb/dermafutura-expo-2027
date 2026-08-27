@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const WEBHOOK_SERVER = 'https://dermalysse-webhook-production.up.railway.app';
+const CACHE_SALA = 'bioskin-congress-seatmap-v2';
 
 type Fichas = {
   ficha1Nombre: string;
@@ -24,13 +25,34 @@ export default function CongresoTickets() {
   const [fichas, setFichas] = useState<Fichas>(FALLBACK);
 
   useEffect(() => {
-    fetch(`${WEBHOOK_SERVER}/congreso/precios`)
+    router.prefetch('/congreso/asientos?ficha=ficha1');
+    router.prefetch('/congreso/asientos?ficha=ficha2');
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 9000);
+
+    fetch(`${WEBHOOK_SERVER}/congreso/precios`, { cache: 'no-store', signal: controller.signal })
       .then((r) => (r.ok ? (r.json() as Promise<Fichas>) : null))
       .then((data) => {
         if (data && data.ficha1Nombre) setFichas(data);
       })
       .catch(() => {});
-  }, []);
+
+    fetch(`${WEBHOOK_SERVER}/congreso/asientos`, { cache: 'no-store', signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.layout) && Array.isArray(data.asientos)) {
+          sessionStorage.setItem(CACHE_SALA, JSON.stringify({ ...data, guardadoEn: Date.now() }));
+        }
+      })
+      .catch(() => {})
+      .finally(() => window.clearTimeout(timeout));
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [router]);
 
   const cards: Array<{ key: 'ficha1' | 'ficha2'; nombre: string; precio: number; zonaTexto: string }> = [
     { key: 'ficha1', nombre: fichas.ficha1Nombre, precio: fichas.ficha1Precio, zonaTexto: 'Filas A–D al frente' },
