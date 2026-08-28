@@ -1,4 +1,5 @@
 import CongresoTickets from './components/CongresoTickets';
+import CongresoPurchaseStatus from './components/CongresoPurchaseStatus';
 import areas from '../data/hero-figuras.json';
 import faq from '../data/faq.json';
 import programa from '../data/programa.json';
@@ -21,6 +22,7 @@ const audiences = [
 export default function Home() {
   return (
     <main>
+      <CongresoPurchaseStatus />
       <header className="site-header">
         <a className="brand" href="#inicio" aria-label="BIO SKIN Congress, inicio"><img className="brand-logo" src="/images/logo-bioskin.jpeg" alt="BIO SKIN Congress 2026" /></a>
         <nav className="nav-links" aria-label="Navegación principal"><a href="#voces">Voces</a><a href="#programa">Programa</a><a href="#pases">Pases</a><a href="#sede">Sede</a></nav>
