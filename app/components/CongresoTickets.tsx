@@ -13,6 +13,11 @@ type Fichas = {
   ficha2Precio: number;
 };
 
+type MapaSalaCache = {
+  layout: unknown[];
+  asientos: unknown[];
+};
+
 const FALLBACK: Fichas = {
   ficha1Nombre: 'Preferente',
   ficha1Precio: 1000,
@@ -39,7 +44,7 @@ export default function CongresoTickets() {
       .catch(() => {});
 
     fetch(`${WEBHOOK_SERVER}/congreso/asientos`, { cache: 'no-store', signal: controller.signal })
-      .then((r) => (r.ok ? r.json() : null))
+      .then((r) => (r.ok ? (r.json() as Promise<MapaSalaCache>) : null))
       .then((data) => {
         if (data && Array.isArray(data.layout) && Array.isArray(data.asientos)) {
           sessionStorage.setItem(CACHE_SALA, JSON.stringify({ ...data, guardadoEn: Date.now() }));

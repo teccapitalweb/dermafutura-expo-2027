@@ -253,7 +253,7 @@ export default function SeatPicker() {
                 <span aria-hidden="true">!</span>
                 <h3>La sala no respondió</h3>
                 <p>Tu selección sigue intacta. Vuelve a cargar el mapa para continuar.</p>
-                <button type="button" onClick={cargarAsientos}>Volver a cargar</button>
+                <button type="button" onClick={() => cargarAsientos()}>Volver a cargar</button>
               </div>
             ) : (
               <div className="seatpage-rows">
