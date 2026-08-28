@@ -95,12 +95,12 @@ export default function Home() {
         </div>
       </section>
 
+      <PromoVideo />
+
       <section className="opening paper-section" id="universo">
         <div className="shell opening-grid"><p className="section-tag">01 / El manifiesto</p><div className="opening-title"><span>EL FUTURO</span><h2>TAMBIÉN</h2><em>TIENE PIEL.</em></div><div className="opening-copy"><p>Una plataforma donde medicina, tecnología, cultura y nuevas generaciones dejan de vivir en mundos separados.</p><a className="text-link" href="#programa">Descubrir la experiencia <span>↗</span></a></div></div>
         <div className="editorial-ribbon"><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span></div>
       </section>
-
-      <PromoVideo />
 
       <section className="voices ink-section" id="voces">
         <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>La estructura está preparada para recibir fotografía, nombre, especialidad y tema de cada ponente confirmado. Por ahora presentamos el casting visual y las seis conversaciones que queremos abrir.</p></div>
