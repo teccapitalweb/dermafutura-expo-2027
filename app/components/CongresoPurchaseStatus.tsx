@@ -13,7 +13,8 @@ export default function CongresoPurchaseStatus() {
     if (url.searchParams.get('congreso') !== 'success') return;
     sessionStorage.removeItem(CHECKOUT_PENDIENTE);
     sessionStorage.removeItem(CACHE_SALA);
-    setVisible(true);
+    const timer = window.setTimeout(() => setVisible(true), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   function cerrar() {
