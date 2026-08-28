@@ -415,7 +415,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .seatmap-rowlabel { color:var(--seat-smoke); font-size:9px; font-weight:800; letter-spacing:.08em; text-align:center; }
 .seatmap-row[data-zona="ponente"] .seatmap-rowlabel { color:var(--seat-bronze); }
 .seatmap-seats { display:flex; gap:7px; }
-.seat { --chair-fill:var(--seat-white); --chair-edge:#0a6e78; --chair-ink:var(--seat-ink); --chair-shadow:#b8ddd1; position:relative; width:44px; height:43px; flex:0 0 44px; border:0; padding:0; background:transparent; color:var(--chair-ink); cursor:pointer; transition:transform .18s ease,filter .18s ease; }
+.seat { --chair-fill:#0a6e78; --chair-edge:#04302b; --chair-ink:#ffffff; --chair-shadow:#052622; position:relative; width:44px; height:43px; flex:0 0 44px; border:0; padding:0; background:transparent; color:var(--chair-ink); cursor:pointer; transition:transform .18s ease,filter .18s ease; }
 .seat::before,.seat::after { content:''; position:absolute; z-index:3; top:19px; width:6px; height:17px; border:1px solid var(--chair-edge); border-radius:4px; background:var(--chair-fill); }
 .seat::before { left:0; }.seat::after { right:0; }
 .seat-chair { position:absolute; inset:0; display:block; }
@@ -426,13 +426,17 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .seat-seleccionado { --chair-fill:var(--seat-bronze); --chair-edge:var(--seat-ink); --chair-ink:var(--seat-ink); --chair-shadow:var(--seat-champagne); transform:translateY(-4px); filter:drop-shadow(0 8px 8px rgba(20,184,166,.3)); }
 .seat-seleccionado:hover:not(:disabled) { transform:translateY(-5px) rotate(1deg); }
 .seat-ocupado { --chair-fill:#d9d2ca; --chair-edge:#b0a59a; --chair-ink:#9e958c; --chair-shadow:#c2b7ac; cursor:not-allowed; }
+.seat-ocupado::before,.seat-ocupado::after { display:none; }
+.seat-ocupado .seat-chair::before,.seat-ocupado .seat-chair::after { display:none; }
+.seat-ocupado .seat-chair i { display:none; }
+.seat-ocupado .seat-chair { width:44px; height:43px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235a534b'%3E%3Ccircle cx='12' cy='7.5' r='4'/%3E%3Cpath d='M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5z'/%3E%3C/svg%3E") center/contain no-repeat; }
 .seat-reservado { --chair-fill:#fff7df; --chair-edge:#d79b20; --chair-ink:#8a5b00; --chair-shadow:#f0c45c; cursor:not-allowed; }
 .seat-ponente { --chair-fill:var(--seat-ink); --chair-edge:var(--seat-ink); --chair-ink:var(--seat-white); --chair-shadow:var(--seat-champagne); cursor:not-allowed; }
 .seat-otra-zona { opacity:.2; filter:grayscale(1); cursor:not-allowed; }
 .seat:disabled:hover { transform:none; filter:none; }
 .seatmap-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:12px 20px; margin:25px 0 0; border-top:1px solid var(--seat-line); padding-top:20px; color:var(--seat-smoke); font-size:8px; }
 .seatmap-legend span { display:inline-flex; align-items:center; gap:7px; }
-.seat-demo { display:inline-block; width:13px; height:13px; border:1px solid var(--seat-ink); border-radius:4px 4px 2px 2px; background:var(--seat-white); box-shadow:0 2px 0 #cfc9c0; }
+.seat-demo { display:inline-block; width:13px; height:13px; border:1px solid #04302b; border-radius:4px 4px 2px 2px; background:#0a6e78; box-shadow:0 2px 0 #052622; }
 .demo-seleccionado { border-color:var(--seat-ink); background:var(--seat-bronze); box-shadow:0 2px 0 var(--seat-champagne); }
 .demo-reservado { border-color:#d79b20; background:#fff7df; box-shadow:0 2px 0 #f0c45c; }
 .demo-ocupado { border-color:#aaa6a0; background:#d5d2cd; box-shadow:0 2px 0 #bbb6af; }
@@ -510,6 +514,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
   .seat-chair::before { left:4px; width:19px; height:21px; border-radius:7px 7px 4px 4px; }
   .seat-chair::after { right:2px; bottom:2px; left:2px; height:10px; border-radius:4px 4px 6px 6px; box-shadow:0 2px 0 var(--chair-shadow); }
   .seat-chair i { top:6px; font-size:6px; }
+  .seat-ocupado .seat-chair { width:29px; height:32px; }
   .seatmap-row[data-zona="preferente"] + .seatmap-row[data-zona="general"]::before { left:21px; }
   .seatmap-legend { gap:10px 13px; padding-inline:5px; }
   .seatpage-summary { display:block; padding:25px 21px 21px; box-shadow:0 18px 38px rgba(58,46,32,.12); }
@@ -529,6 +534,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 
 @media (max-width:390px) {
   .seat { width:27px; flex-basis:27px; }
+  .seat-ocupado .seat-chair { width:27px; }
   .seatmap-seats { gap:1px; }
   .seatpage-headprecio strong { font-size:13px; }
 }
