@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Un solo despliegue a la vez; no cancela el que ya este corriendo.
+# Un solo despliegue a la vez; no cancela el que ya esté corriendo.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -28,8 +28,10 @@ jobs:
 
       - run: npm ci
 
-      - name: Build estatico (export + basePath + rutas /images/)
+      - name: Build estatico para congreso.dermalyssemx.com
         run: node scripts/build-gh-pages.mjs
+        env:
+          GH_PAGES_CUSTOM_DOMAIN: '1'
 
       - uses: actions/configure-pages@v5
 
