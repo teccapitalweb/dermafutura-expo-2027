@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const WEBHOOK_SERVER = 'https://dermalysse-webhook-production.up.railway.app';
@@ -22,6 +22,12 @@ type Asiento = {
 };
 type MapaSala = { layout: FilaLayout[]; asientos: Asiento[] };
 type CacheSala = MapaSala & { guardadoEn: number };
+type CheckoutPendiente = {
+  sessionId: string;
+  asiento: string;
+  ficha: 'ficha1' | 'ficha2';
+  creadoEn: number;
+};
 
 const FALLBACK: Fichas = {
   ficha1Nombre: 'Preferente',
@@ -41,6 +47,7 @@ const LAYOUT_INICIAL: FilaLayout[] = [
   ...['E', 'F', 'G', 'H', 'I', 'J'].map((fila) => ({ fila, asientos: 10, zona: 'general' })),
 ];
 const CACHE_SALA = 'bioskin-congress-seatmap-v2';
+const CHECKOUT_PENDIENTE = 'bioskin-congress-checkout-pending-v1';
 const VIGENCIA_CACHE_MS = 90_000;
 
 const ESPERA_MAXIMA_MS = 12000;
@@ -89,11 +96,21 @@ function urlHome(query: string): string {
   return `${window.location.origin}${home}${query}#sede`;
 }
 
+function urlCancelacion(ficha: 'ficha1' | 'ficha2'): string {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('ficha', ficha);
+  url.searchParams.set('checkout', 'canceled');
+  return url.toString();
+}
+
 export default function SeatPicker() {
   const router = useRouter();
   const params = useSearchParams();
   const fichaParam = params.get('ficha');
   const ficha: 'ficha1' | 'ficha2' | null = fichaParam === 'ficha1' || fichaParam === 'ficha2' ? fichaParam : null;
+  const checkoutCancelado = params.get('checkout') === 'canceled';
 
   const [fichas, setFichas] = useState<Fichas>(FALLBACK);
   const [layout, setLayout] = useState<FilaLayout[]>(LAYOUT_INICIAL);
@@ -103,6 +120,7 @@ export default function SeatPicker() {
   const [seleccionado, setSeleccionado] = useState<string | null>(null);
   const [pagando, setPagando] = useState(false);
   const [error, setError] = useState('');
+  const liberandoReserva = useRef(false);
 
   useEffect(() => {
     if (!ficha) { router.replace('/#pases'); return; }
@@ -137,6 +155,42 @@ export default function SeatPicker() {
     }
   }, []);
 
+  const liberarReservaPendiente = useCallback(async () => {
+    if (liberandoReserva.current) return;
+
+    let pendiente: CheckoutPendiente | null = null;
+    try {
+      pendiente = JSON.parse(sessionStorage.getItem(CHECKOUT_PENDIENTE) || 'null') as CheckoutPendiente | null;
+    } catch {
+      sessionStorage.removeItem(CHECKOUT_PENDIENTE);
+    }
+    if (!pendiente?.sessionId) return;
+
+    liberandoReserva.current = true;
+    setPagando(false);
+    try {
+      const resultado = await obtenerJson<{ liberado: boolean; motivo: string; asiento?: string }>(
+        `${WEBHOOK_SERVER}/congreso/cancelar-reserva`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: pendiente.sessionId }),
+        },
+      );
+      sessionStorage.removeItem(CHECKOUT_PENDIENTE);
+      sessionStorage.removeItem(CACHE_SALA);
+      setSeleccionado(null);
+      await cargarAsientos();
+      if (resultado.motivo !== 'pagado') {
+        setError(`Pago cancelado. El asiento ${resultado.asiento || pendiente.asiento} vuelve a estar disponible.`);
+      }
+    } catch {
+      setError('No pudimos liberar la reserva de inmediato. Vuelve a sincronizar; se liberará automáticamente al vencer Stripe.');
+    } finally {
+      liberandoReserva.current = false;
+    }
+  }, [cargarAsientos]);
+
   useEffect(() => {
     if (!ficha) return;
     const inicio = window.setTimeout(() => {
@@ -160,6 +214,19 @@ export default function SeatPicker() {
     return () => window.clearTimeout(inicio);
   }, [ficha, cargarAsientos]);
 
+  useEffect(() => {
+    if (!ficha) return;
+    const alVolverDeStripe = () => { void liberarReservaPendiente(); };
+    window.addEventListener('pageshow', alVolverDeStripe);
+    if (checkoutCancelado) {
+      alVolverDeStripe();
+      const limpia = new URL(window.location.href);
+      limpia.searchParams.delete('checkout');
+      window.history.replaceState(null, '', `${limpia.pathname}${limpia.search}${limpia.hash}`);
+    }
+    return () => window.removeEventListener('pageshow', alVolverDeStripe);
+  }, [ficha, checkoutCancelado, liberarReservaPendiente]);
+
   if (!ficha) return null; // se redirige en el useEffect de arriba
 
   async function pagar() {
@@ -167,17 +234,23 @@ export default function SeatPicker() {
     setPagando(true);
     setError('');
     try {
-      const data = await obtenerJson<{ url?: string; error?: string }>(`${WEBHOOK_SERVER}/create-checkout-session-congreso`, {
+      const data = await obtenerJson<{ url?: string; sessionId?: string; error?: string }>(`${WEBHOOK_SERVER}/create-checkout-session-congreso`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ficha,
           asiento: seleccionado,
           successUrl: urlHome('?congreso=success'),
-          cancelUrl: urlHome('?congreso=canceled'),
+          cancelUrl: urlCancelacion(ficha),
         }),
       });
-      if (!data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
+      if (!data.url || !data.sessionId) throw new Error(data.error || 'No se pudo iniciar el pago');
+      sessionStorage.setItem(CHECKOUT_PENDIENTE, JSON.stringify({
+        sessionId: data.sessionId,
+        asiento: seleccionado,
+        ficha,
+        creadoEn: Date.now(),
+      } satisfies CheckoutPendiente));
       window.location.href = data.url;
     } catch (err) {
       const mensaje = err instanceof Error ? err.message : 'Ocurrió un error, intenta de nuevo';
@@ -298,7 +371,8 @@ export default function SeatPicker() {
             <div className="seatmap-legend" aria-label="Disponibilidad de asientos">
               <span><i className="seat-demo demo-libre" /> Disponible</span>
               <span><i className="seat-demo demo-seleccionado" /> Tu asiento</span>
-              <span><i className="seat-demo demo-ocupado" /> Ocupado</span>
+              <span><i className="seat-demo demo-reservado" /> En proceso de pago</span>
+              <span><i className="seat-demo demo-ocupado" /> Vendido</span>
               <span><i className="seat-demo demo-ponente" /> Ponentes</span>
               <span><i className="seat-demo demo-otra" /> Otra zona</span>
             </div>

@@ -316,7 +316,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .seat-seleccionado { --chair-fill:var(--seat-bronze); --chair-edge:var(--seat-ink); --chair-ink:var(--seat-ink); --chair-shadow:var(--seat-champagne); transform:translateY(-4px); filter:drop-shadow(0 8px 8px rgba(20,184,166,.3)); }
 .seat-seleccionado:hover:not(:disabled) { transform:translateY(-5px) rotate(1deg); }
 .seat-ocupado { --chair-fill:#d9d2ca; --chair-edge:#b0a59a; --chair-ink:#9e958c; --chair-shadow:#c2b7ac; cursor:not-allowed; }
-.seat-reservado { --chair-fill:#ddd6ce; --chair-edge:#b8ada2; --chair-ink:#9d948a; --chair-shadow:#c8bdb1; cursor:not-allowed; }
+.seat-reservado { --chair-fill:#fff7df; --chair-edge:#d79b20; --chair-ink:#8a5b00; --chair-shadow:#f0c45c; cursor:not-allowed; }
 .seat-ponente { --chair-fill:var(--seat-ink); --chair-edge:var(--seat-ink); --chair-ink:var(--seat-white); --chair-shadow:var(--seat-champagne); cursor:not-allowed; }
 .seat-otra-zona { opacity:.2; filter:grayscale(1); cursor:not-allowed; }
 .seat:disabled:hover { transform:none; filter:none; }
@@ -324,6 +324,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .seatmap-legend span { display:inline-flex; align-items:center; gap:7px; }
 .seat-demo { display:inline-block; width:13px; height:13px; border:1px solid var(--seat-ink); border-radius:4px 4px 2px 2px; background:var(--seat-white); box-shadow:0 2px 0 #cfc9c0; }
 .demo-seleccionado { border-color:var(--seat-ink); background:var(--seat-bronze); box-shadow:0 2px 0 var(--seat-champagne); }
+.demo-reservado { border-color:#d79b20; background:#fff7df; box-shadow:0 2px 0 #f0c45c; }
 .demo-ocupado { border-color:#aaa6a0; background:#d5d2cd; box-shadow:0 2px 0 #bbb6af; }
 .demo-ponente { background:var(--seat-ink); box-shadow:0 2px 0 var(--seat-champagne); }
 .demo-otra { opacity:.23; }
