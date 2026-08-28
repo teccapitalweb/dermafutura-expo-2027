@@ -20,7 +20,7 @@ const outline = Bungee_Outline({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://dermafutura-expo-2027.coordinaciontecapita.chatgpt.site'),
+  metadataBase: new URL('https://congreso.dermalyssemx.com'),
   title: 'BIO SKIN Congress 2026 — Ciencia, piel y futuro',
   description: 'Una nueva plataforma para conectar dermatología clínica, innovación, tecnología y cuidado integral.',
   openGraph: {

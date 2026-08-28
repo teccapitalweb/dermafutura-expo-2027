@@ -2,8 +2,8 @@
   "enabled": true,
   "currency": "MXN",
   "items": [
-    { "id": "ficha1", "name": "Especial", "price": 1000 },
-    { "id": "ficha2", "name": "General", "price": 500 }
+    { "id": "ficha1", "name": "Especial", "price": 15 },
+    { "id": "ficha2", "name": "General", "price": 10 }
   ],
   "note": "Nombres y precios editables desde el panel admin (pestaña Congreso). Los valores reales de venta se leen en vivo desde Firestore/Stripe; estos son solo el respaldo inicial."
 }

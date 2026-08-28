@@ -30,10 +30,10 @@ type CheckoutPendiente = {
 };
 
 const FALLBACK: Fichas = {
-  ficha1Nombre: 'Preferente',
-  ficha1Precio: 1000,
+  ficha1Nombre: 'Especial',
+  ficha1Precio: 15,
   ficha2Nombre: 'General',
-  ficha2Precio: 500,
+  ficha2Precio: 10,
 };
 
 const ZONA_POR_FICHA: Record<'ficha1' | 'ficha2', string> = {

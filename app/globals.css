@@ -86,6 +86,84 @@ em { color:var(--rose); font-style:normal; font-weight:600; }
 .voice-list p { margin:0; color:rgba(255,255,255,.43); font-size:8px; letter-spacing:.1em; text-transform:uppercase; }
 .voice-list i { font-style:normal; }
 
+/* Tarjeta profesional compartida mediante los QR físicos del congreso. */
+.digital-card-page { position:relative; display:grid; min-height:100svh; place-items:center; overflow:hidden; padding:44px 110px 44px 44px; background:radial-gradient(circle at 70% 24%,rgba(20,184,166,.2),transparent 34%),linear-gradient(125deg,#06110e 0%,#0b1e18 52%,#07110e 100%); color:var(--ivory); isolation:isolate; }
+.digital-card-grain { position:absolute; z-index:-1; inset:0; opacity:.17; background-image:radial-gradient(rgba(255,255,255,.44) .55px,transparent .7px); background-size:7px 7px; mask-image:linear-gradient(120deg,black,transparent 86%); pointer-events:none; }
+.digital-card-page::before { content:'BIO / SKIN'; position:absolute; z-index:-1; right:-.08em; bottom:-.16em; color:transparent; font-size:clamp(112px,20vw,360px); font-weight:800; letter-spacing:-.09em; line-height:.78; white-space:nowrap; -webkit-text-stroke:1px rgba(127,230,194,.13); }
+.digital-card-orbit { position:absolute; z-index:-1; border:1px solid rgba(127,230,194,.15); border-radius:50%; pointer-events:none; }
+.digital-card-orbit-a { top:-29vw; right:-10vw; width:64vw; height:64vw; }
+.digital-card-orbit-b { bottom:-24vw; left:-17vw; width:54vw; height:54vw; }
+.digital-card-shell { width:min(100%,1050px); border:1px solid rgba(255,255,255,.18); background:rgba(7,20,16,.69); box-shadow:0 34px 100px rgba(0,0,0,.34); backdrop-filter:blur(24px); }
+.digital-card-header { display:flex; align-items:center; justify-content:space-between; min-height:88px; padding:19px 24px; border-bottom:1px solid rgba(255,255,255,.14); }
+.digital-card-brand { display:flex; align-items:center; gap:12px; color:#fff; font-size:11px; font-weight:800; letter-spacing:.13em; line-height:1.1; }
+.digital-card-brand small { display:block; margin-top:4px; color:var(--mint); font-size:7px; letter-spacing:.19em; text-transform:uppercase; }
+.digital-card-brand-mark { display:grid; width:46px; aspect-ratio:1; place-items:center; border:1px solid rgba(255,255,255,.52); border-radius:50%; font-family:var(--font-display),sans-serif; font-size:15px; letter-spacing:-.04em; }
+.digital-card-code { display:inline-flex; align-items:center; min-height:31px; padding:0 12px; border:1px solid rgba(127,230,194,.42); border-radius:999px; background:rgba(20,184,166,.1); color:var(--mint); font-size:7px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+.digital-card-profile { display:grid; min-height:510px; grid-template-columns:minmax(270px,.8fr) minmax(0,1.2fr); align-items:center; gap:7%; padding:58px clamp(34px,6vw,78px); }
+.digital-card-monogram { position:relative; display:grid; width:min(100%,330px); aspect-ratio:.82; place-items:center; border:1px solid rgba(127,230,194,.35); background:linear-gradient(145deg,rgba(20,184,166,.2),rgba(7,22,17,.5)); box-shadow:18px 18px 0 rgba(20,184,166,.11); }
+.digital-card-monogram::before { content:''; position:absolute; inset:15px; border:1px solid rgba(255,255,255,.13); }
+.digital-card-monogram::after { content:'PROFESSIONAL NETWORK'; position:absolute; right:18px; bottom:15px; color:rgba(255,255,255,.38); font-size:6px; font-weight:800; letter-spacing:.17em; writing-mode:vertical-rl; }
+.digital-card-monogram span { font-family:var(--font-display),sans-serif; font-size:clamp(70px,8vw,120px); font-weight:600; letter-spacing:-.09em; text-shadow:7px 7px 0 rgba(20,184,166,.42); }
+.digital-card-copy { min-width:0; }
+.digital-card-eyebrow { margin:0 0 19px; color:var(--mint); font-size:7px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; }
+.digital-card-copy h1 { max-width:680px; margin:0; font-family:var(--font-display),sans-serif; font-size:clamp(48px,6vw,86px); font-weight:600; letter-spacing:-.065em; line-height:.9; overflow-wrap:anywhere; }
+.digital-card-role { max-width:570px; margin:26px 0 0; color:rgba(255,255,255,.68); font-size:13px; line-height:1.7; }
+.digital-card-role strong { color:#fff; font-weight:700; }
+.digital-card-role span { color:var(--rose); }
+.digital-card-bio { max-width:570px; margin:23px 0 0; border-top:1px solid rgba(255,255,255,.14); padding-top:22px; color:rgba(255,255,255,.58); font-size:12px; line-height:1.75; white-space:pre-line; }
+.digital-card-footer { display:flex; min-height:84px; align-items:center; justify-content:space-between; gap:30px; border-top:1px solid rgba(255,255,255,.14); padding:18px 24px; }
+.digital-card-footer div { display:flex; align-items:center; gap:12px; }
+.digital-card-footer small,.digital-card-footer > span { color:rgba(255,255,255,.35); font-size:6px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+.digital-card-footer strong { font-size:8px; letter-spacing:.08em; }
+.digital-card-contacts { position:fixed; z-index:5; top:50%; right:24px; display:flex; flex-direction:column; gap:9px; transform:translateY(-50%); }
+.digital-card-contacts a { position:relative; display:grid; width:56px; height:56px; place-items:center; border:1px solid rgba(255,255,255,.28); border-radius:50%; background:rgba(245,250,248,.96); box-shadow:0 14px 32px rgba(0,0,0,.2); color:var(--ink); transition:transform .2s ease,background .2s ease,color .2s ease; }
+.digital-card-contacts a:hover { transform:translateX(-5px); background:var(--mint); color:var(--ink); }
+.digital-card-contacts svg { width:21px; height:21px; }
+.digital-card-contacts a span { position:absolute; right:66px; width:max-content; opacity:0; border:1px solid rgba(255,255,255,.18); border-radius:999px; padding:8px 12px; background:rgba(5,16,13,.95); color:#fff; font-size:7px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; transform:translateX(8px); transition:.2s ease; pointer-events:none; }
+.digital-card-contacts a:hover span,.digital-card-contacts a:focus-visible span { opacity:1; transform:translateX(0); }
+.digital-card-state { width:min(100%,610px); border:1px solid rgba(255,255,255,.18); padding:clamp(36px,7vw,72px); background:rgba(7,20,16,.72); box-shadow:0 34px 100px rgba(0,0,0,.32); text-align:center; backdrop-filter:blur(22px); }
+.digital-card-state-mark { position:relative; display:grid; width:86px; height:86px; place-items:center; margin:0 auto 30px; border:1px solid rgba(127,230,194,.5); border-radius:50%; }
+.digital-card-state-mark span { width:20px; height:20px; border:2px solid var(--mint); border-radius:50%; }
+.digital-card-state-mark::before,.digital-card-state-mark::after { content:''; position:absolute; inset:9px; border:1px solid rgba(127,230,194,.18); border-radius:50%; }
+.digital-card-state-mark::after { inset:20px; }
+.digital-card-state-mark.is-loading { animation:digitalCardSpin 2.4s linear infinite; }
+.digital-card-state h1 { margin:0; font-family:var(--font-display),sans-serif; font-size:clamp(40px,7vw,70px); font-weight:600; letter-spacing:-.06em; line-height:.95; }
+.digital-card-state > p:not(.digital-card-eyebrow) { max-width:450px; margin:22px auto 27px; color:rgba(255,255,255,.62); font-size:12px; line-height:1.75; }
+@keyframes digitalCardSpin { to { transform:rotate(360deg); } }
+
+@media (max-width:900px) {
+  .digital-card-page { padding:28px 28px 106px; }
+  .digital-card-profile { min-height:0; grid-template-columns:1fr; gap:38px; padding:36px; }
+  .digital-card-monogram { width:230px; aspect-ratio:1; }
+  .digital-card-copy h1 { font-size:clamp(46px,11vw,76px); }
+  .digital-card-contacts { top:auto; right:16px; bottom:18px; left:16px; flex-direction:row; justify-content:center; transform:none; }
+  .digital-card-contacts a:hover { transform:translateY(-4px); }
+  .digital-card-contacts a span { display:none; }
+}
+
+@media (max-width:560px) {
+  .digital-card-page { padding:12px 12px 94px; place-items:stretch; }
+  .digital-card-shell { align-self:center; }
+  .digital-card-header { min-height:72px; padding:14px 16px; }
+  .digital-card-brand-mark { width:40px; }
+  .digital-card-profile { gap:30px; padding:26px 22px 34px; }
+  .digital-card-monogram { width:170px; box-shadow:10px 10px 0 rgba(20,184,166,.11); }
+  .digital-card-monogram span { font-size:60px; }
+  .digital-card-copy h1 { font-size:clamp(42px,14vw,62px); }
+  .digital-card-role { margin-top:20px; font-size:12px; }
+  .digital-card-bio { margin-top:18px; padding-top:17px; font-size:11px; }
+  .digital-card-footer { align-items:flex-start; flex-direction:column; gap:9px; padding:16px; }
+  .digital-card-footer div { align-items:flex-start; flex-direction:column; gap:5px; }
+  .digital-card-contacts { gap:7px; }
+  .digital-card-contacts a { width:50px; height:50px; }
+  .digital-card-state { align-self:center; padding:40px 24px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .digital-card-state-mark.is-loading { animation:none; }
+  .digital-card-contacts a { transition:none; }
+}
+
 .runway { overflow:hidden; padding:145px 0 160px; }
 .runway-head { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:70px; }
 .runway-head h2 { margin:0; font-size:clamp(70px,8vw,128px); font-weight:800; letter-spacing:-.08em; line-height:.74; text-align:right; }
