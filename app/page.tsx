@@ -19,6 +19,62 @@ const audiences = [
   ['06', 'Industria', 'Laboratorios, dispositivos y aliados de innovación.'],
 ];
 
+function PromoVideo() {
+  return (
+    <section className="promo-film" id="video" aria-labelledby="promo-film-title">
+      <style>{`
+        .promo-film{position:relative;overflow:hidden;background:#f4f7f5;color:#071b17;padding:clamp(5rem,9vw,9rem) 0}
+        .promo-film::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(7,55,47,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(7,55,47,.055) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,transparent,black 22%,black 78%,transparent);pointer-events:none}
+        .promo-film-shell{position:relative;width:min(1180px,calc(100% - 48px));margin:0 auto}
+        .promo-film-head{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);align-items:end;gap:clamp(2rem,6vw,6rem);margin-bottom:clamp(2.25rem,4vw,4rem)}
+        .promo-film-eyebrow{display:flex;align-items:center;gap:.8rem;margin:0 0 1.2rem;font-size:.7rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#078c7b}
+        .promo-film-eyebrow::before{content:"";width:34px;height:1px;background:#078c7b}
+        .promo-film h2{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:clamp(3.2rem,7.2vw,7.4rem);font-weight:400;line-height:.86;letter-spacing:-.06em}
+        .promo-film h2 em{display:block;color:#079c88;font-weight:400}
+        .promo-film-copy{border-left:1px solid rgba(7,55,47,.25);padding-left:clamp(1.3rem,3vw,2.3rem)}
+        .promo-film-copy p{margin:0;font-size:clamp(1rem,1.4vw,1.18rem);line-height:1.7;color:#365e56}
+        .promo-film-copy span{display:block;margin-top:1.4rem;font-size:.68rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#071b17}
+        .promo-film-frame{position:relative;padding:clamp(8px,1.2vw,14px);background:#061713;border-radius:clamp(18px,2.4vw,30px);box-shadow:0 35px 85px rgba(3,38,32,.22);isolation:isolate}
+        .promo-film-frame::before{content:"";position:absolute;inset:-1px;border:1px solid rgba(7,156,136,.35);border-radius:inherit;pointer-events:none}
+        .promo-film-player{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:clamp(12px,1.8vw,21px);background:#03110e}
+        .promo-film-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+        .promo-film-index{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.05rem .45rem .15rem;color:#c8d9d5;font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+        .promo-film-index strong{color:#50dcc5;font-weight:800}
+        @media(max-width:760px){.promo-film{padding:4.5rem 0}.promo-film-shell{width:min(100% - 28px,1180px)}.promo-film-head{grid-template-columns:1fr;gap:1.7rem;margin-bottom:2rem}.promo-film h2{font-size:clamp(3rem,17vw,5rem);line-height:.9}.promo-film-copy{padding-left:1.1rem}.promo-film-index{align-items:flex-start;flex-direction:column;gap:.45rem;padding:.9rem .35rem .1rem;letter-spacing:.13em}}
+      `}</style>
+      <div className="promo-film-shell">
+        <div className="promo-film-head">
+          <div>
+            <p className="promo-film-eyebrow">BIO SKIN / En primera persona</p>
+            <h2 id="promo-film-title">MÍRALO.<em>SIÉNTELO.</em></h2>
+          </div>
+          <div className="promo-film-copy">
+            <p>Una mirada al universo que estamos construyendo: ciencia, conversación y una nueva forma de vivir el futuro de la piel.</p>
+            <span>Presentación oficial · Congress 2026</span>
+          </div>
+        </div>
+
+        <div className="promo-film-frame">
+          <div className="promo-film-player">
+            <iframe
+              src="https://player.mediadelivery.net/embed/739112/9c425f37-da0a-485a-8990-ebb57c4fae7e?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
+              loading="lazy"
+              title="Video promocional de BIO SKIN Congress 2026"
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowFullScreen
+            />
+          </div>
+          <div className="promo-film-index" aria-hidden="true">
+            <strong>Film 01</strong>
+            <span>Ciencia / Piel / Futuro</span>
+            <span>25 segundos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <main>
@@ -43,6 +99,8 @@ export default function Home() {
         <div className="shell opening-grid"><p className="section-tag">01 / El manifiesto</p><div className="opening-title"><span>EL FUTURO</span><h2>TAMBIÉN</h2><em>TIENE PIEL.</em></div><div className="opening-copy"><p>Una plataforma donde medicina, tecnología, cultura y nuevas generaciones dejan de vivir en mundos separados.</p><a className="text-link" href="#programa">Descubrir la experiencia <span>↗</span></a></div></div>
         <div className="editorial-ribbon"><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span></div>
       </section>
+
+      <PromoVideo />
 
       <section className="voices ink-section" id="voces">
         <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>La estructura está preparada para recibir fotografía, nombre, especialidad y tema de cada ponente confirmado. Por ahora presentamos el casting visual y las seis conversaciones que queremos abrir.</p></div>
