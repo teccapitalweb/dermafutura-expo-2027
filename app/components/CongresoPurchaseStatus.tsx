@@ -32,10 +32,10 @@ export default function CongresoPurchaseStatus() {
         <span className="purchase-success-kicker">Pago confirmado · BIO SKIN 2026</span>
         <div className="purchase-success-mark" aria-hidden="true">✓</div>
         <h2 id="purchase-success-title">Tu compra se realizó con éxito</h2>
-        <p>Tu ficha y tu asiento quedaron confirmados con los datos que proporcionaste en Stripe.</p>
+        <p>Tus lugares quedaron confirmados. Stripe guardó únicamente el nombre, correo y teléfono del comprador.</p>
         <div className="purchase-success-note">
-          <strong>¿Qué sigue?</strong>
-          <span>Recibirás la confirmación de compra en el correo registrado.</span>
+          <strong>Puedes rellenarlo después</strong>
+          <span>Enviaremos a tu correo un enlace privado para completar o compartir los datos de cada asistente.</span>
         </div>
         <button type="button" onClick={cerrar}>Continuar al sitio</button>
       </section>
