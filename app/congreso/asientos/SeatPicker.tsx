@@ -24,7 +24,8 @@ type MapaSala = { layout: FilaLayout[]; asientos: Asiento[] };
 type CacheSala = MapaSala & { guardadoEn: number };
 type CheckoutPendiente = {
   sessionId: string;
-  asiento: string;
+  asientos?: string[];
+  asiento?: string;
   ficha: 'ficha1' | 'ficha2';
   creadoEn: number;
 };
@@ -49,6 +50,7 @@ const LAYOUT_INICIAL: FilaLayout[] = [
 const CACHE_SALA = 'bioskin-congress-seatmap-v2';
 const CHECKOUT_PENDIENTE = 'bioskin-congress-checkout-pending-v1';
 const VIGENCIA_CACHE_MS = 90_000;
+const MAX_ASIENTOS_GRUPO = 10;
 
 const ESPERA_MAXIMA_MS = 12000;
 
@@ -117,7 +119,7 @@ export default function SeatPicker() {
   const [asientos, setAsientos] = useState<Record<string, Asiento>>({});
   const [cargando, setCargando] = useState(true);
   const [sincronizado, setSincronizado] = useState(false);
-  const [seleccionado, setSeleccionado] = useState<string | null>(null);
+  const [seleccionados, setSeleccionados] = useState<string[]>([]);
   const [pagando, setPagando] = useState(false);
   const [error, setError] = useState('');
   const liberandoReserva = useRef(false);
@@ -145,6 +147,7 @@ export default function SeatPicker() {
       const mapa: Record<string, Asiento> = {};
       for (const a of data.asientos) mapa[a.id] = a;
       setAsientos(mapa);
+      setSeleccionados((actuales) => actuales.filter((id) => mapa[id]?.estado === 'libre'));
       setSincronizado(true);
       setError('');
       sessionStorage.setItem(CACHE_SALA, JSON.stringify({ ...data, guardadoEn: Date.now() } satisfies CacheSala));
@@ -169,7 +172,7 @@ export default function SeatPicker() {
     liberandoReserva.current = true;
     setPagando(false);
     try {
-      const resultado = await obtenerJson<{ liberado: boolean; motivo: string; asiento?: string }>(
+      const resultado = await obtenerJson<{ liberado: boolean; motivo: string; asientos?: string[]; asiento?: string }>(
         `${WEBHOOK_SERVER}/congreso/cancelar-reserva`,
         {
           method: 'POST',
@@ -179,10 +182,11 @@ export default function SeatPicker() {
       );
       sessionStorage.removeItem(CHECKOUT_PENDIENTE);
       sessionStorage.removeItem(CACHE_SALA);
-      setSeleccionado(null);
+      setSeleccionados([]);
       await cargarAsientos();
       if (resultado.motivo !== 'pagado') {
-        setError(`Pago cancelado. El asiento ${resultado.asiento || pendiente.asiento} vuelve a estar disponible.`);
+        const liberados = resultado.asientos || (resultado.asiento ? [resultado.asiento] : pendiente.asientos || (pendiente.asiento ? [pendiente.asiento] : []));
+        setError(`Pago cancelado. ${liberados.length > 1 ? `Los lugares ${liberados.join(', ')} vuelven` : `El lugar ${liberados[0] || ''} vuelve`} a estar disponible.`);
       }
     } catch {
       setError('No pudimos liberar la reserva de inmediato. Vuelve a sincronizar; se liberará automáticamente al vencer Stripe.');
@@ -202,6 +206,7 @@ export default function SeatPicker() {
           for (const asiento of cache.asientos) mapa[asiento.id] = asiento;
           setLayout(cache.layout);
           setAsientos(mapa);
+          setSeleccionados((actuales) => actuales.filter((id) => mapa[id]?.estado === 'libre'));
           setSincronizado(true);
           setCargando(false);
           cacheValida = true;
@@ -230,7 +235,7 @@ export default function SeatPicker() {
   if (!ficha) return null; // se redirige en el useEffect de arriba
 
   async function pagar() {
-    if (!ficha || !seleccionado) return;
+    if (!ficha || seleccionados.length === 0) return;
     setPagando(true);
     setError('');
     try {
@@ -239,7 +244,10 @@ export default function SeatPicker() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ficha,
-          asiento: seleccionado,
+          // Compatibilidad segura: el servidor anterior puede seguir vendiendo
+          // una entrada individual, pero nunca interpretará un grupo como una sola.
+          asiento: seleccionados.length === 1 ? seleccionados[0] : undefined,
+          asientos: seleccionados,
           successUrl: urlHome('?congreso=success'),
           cancelUrl: urlCancelacion(ficha),
         }),
@@ -247,7 +255,7 @@ export default function SeatPicker() {
       if (!data.url || !data.sessionId) throw new Error(data.error || 'No se pudo iniciar el pago');
       sessionStorage.setItem(CHECKOUT_PENDIENTE, JSON.stringify({
         sessionId: data.sessionId,
-        asiento: seleccionado,
+        asientos: seleccionados,
         ficha,
         creadoEn: Date.now(),
       } satisfies CheckoutPendiente));
@@ -255,8 +263,7 @@ export default function SeatPicker() {
     } catch (err) {
       const mensaje = err instanceof Error ? err.message : 'Ocurrió un error, intenta de nuevo';
       if (/ocup|reserv|409/i.test(mensaje)) {
-        setSeleccionado(null);
-        setError('Ese asiento acaba de ocuparse. Elige otro disponible.');
+        setError('Uno de esos lugares acaba de ocuparse. Conservamos los que siguen libres para que completes tu grupo.');
         await cargarAsientos();
       } else {
         setError(mensaje === 'This operation was aborted'
@@ -271,6 +278,19 @@ export default function SeatPicker() {
   const nombreFicha = ficha === 'ficha1' ? fichas.ficha1Nombre : fichas.ficha2Nombre;
   const precioFicha = ficha === 'ficha1' ? fichas.ficha1Precio : fichas.ficha2Precio;
   const zonaDescripcion = zonaActiva === 'preferente' ? 'Filas A–D · Vista preferente' : 'Filas E–J · Acceso general';
+  const montoTotal = precioFicha * seleccionados.length;
+
+  function alternarAsiento(id: string) {
+    setError('');
+    setSeleccionados((actuales) => {
+      if (actuales.includes(id)) return actuales.filter((asiento) => asiento !== id);
+      if (actuales.length >= MAX_ASIENTOS_GRUPO) {
+        setError(`Puedes reservar hasta ${MAX_ASIENTOS_GRUPO} lugares en una sola compra.`);
+        return actuales;
+      }
+      return [...actuales, id];
+    });
+  }
 
   return (
     <main className="seatpage">
@@ -285,16 +305,16 @@ export default function SeatPicker() {
         </button>
         <div className="seatpage-headinfo">
           <p className="seatpage-tag">BIO SKIN Congress 2026 · Seat edition</p>
-          <h1>Elige tu vista</h1>
+          <h1>Elige tus lugares</h1>
         </div>
         <div className="seatpage-progress" aria-label="Paso 1 de 2">
-          <span className="is-active"><b>1</b>Asiento</span>
+          <span className="is-active"><b>1</b>Lugares</span>
           <i aria-hidden="true" />
           <span><b>2</b>Datos y pago</span>
         </div>
         <div className="seatpage-headprecio">
-          <small>Precio</small>
-          <strong>${precioFicha.toLocaleString('es-MX')} MXN</strong>
+          <small>{seleccionados.length ? `Total · ${seleccionados.length} ${seleccionados.length === 1 ? 'lugar' : 'lugares'}` : 'Precio por lugar'}</small>
+          <strong>${(seleccionados.length ? montoTotal : precioFicha).toLocaleString('es-MX')} MXN</strong>
         </div>
       </header>
 
@@ -303,7 +323,7 @@ export default function SeatPicker() {
           <section className="seatmap-panel" aria-labelledby="seatmap-title">
             <div className="seatmap-panelhead">
               <div>
-                <p>N° 01 / Selección de ubicación</p>
+                <p>N° 01 / Selección individual o en grupo</p>
                 <h2 id="seatmap-title">Sala principal</h2>
               </div>
               <span>{nombreFicha} · {zonaActiva === 'preferente' ? 'A—D' : 'E—J'}</span>
@@ -343,7 +363,7 @@ export default function SeatPicker() {
                         const clases = [
                           'seat',
                           `seat-${estado}`,
-                          seleccionado === id ? 'seat-seleccionado' : '',
+                          seleccionados.includes(id) ? 'seat-seleccionado' : '',
                           f.zona === 'ponente' ? 'seat-ponente' : '',
                           !esDeMiZona && f.zona !== 'ponente' ? 'seat-otra-zona' : '',
                         ].filter(Boolean).join(' ');
@@ -353,9 +373,9 @@ export default function SeatPicker() {
                             type="button"
                             className={clases}
                             disabled={!clicable}
-                            onClick={() => setSeleccionado(seleccionado === id ? null : id)}
-                            aria-pressed={seleccionado === id}
-                            aria-label={`Asiento ${id} ${estado}`}
+                            onClick={() => alternarAsiento(id)}
+                            aria-pressed={seleccionados.includes(id)}
+                            aria-label={`Lugar ${id} ${seleccionados.includes(id) ? 'seleccionado' : estado}`}
                             title={f.zona === 'ponente' ? 'Reservado para ponentes' : `${id} · ${estado}`}
                           >
                             <span className="seat-chair" aria-hidden="true"><i>{i + 1}</i></span>
@@ -370,7 +390,7 @@ export default function SeatPicker() {
 
             <div className="seatmap-legend" aria-label="Disponibilidad de asientos">
               <span><i className="seat-demo demo-libre" /> Disponible</span>
-              <span><i className="seat-demo demo-seleccionado" /> Tu asiento</span>
+              <span><i className="seat-demo demo-seleccionado" /> Tu selección</span>
               <span><i className="seat-demo demo-reservado" /> En proceso de pago</span>
               <span><i className="seat-demo demo-ocupado" /> Vendido</span>
               <span><i className="seat-demo demo-ponente" /> Ponentes</span>
@@ -390,20 +410,27 @@ export default function SeatPicker() {
             <h2>Ficha {nombreFicha}</h2>
             <p className="seatpage-summary-zone">{zonaDescripcion}</p>
 
-            <div className="seatpage-summary-seat" data-empty={!seleccionado || undefined}>
-              <span>Asiento seleccionado</span>
-              <strong>{seleccionado ?? '—'}</strong>
-              <small>{seleccionado ? 'Listo para continuar' : 'Elige una ubicación disponible'}</small>
+            <div className="seatpage-summary-seat" data-empty={!seleccionados.length || undefined}>
+              <span>{seleccionados.length === 1 ? 'Lugar seleccionado' : 'Lugares seleccionados'}</span>
+              <strong>{seleccionados.length || '—'}</strong>
+              {seleccionados.length > 0 ? (
+                <div className="seatpage-summary-chips" aria-label={`Lugares: ${seleccionados.join(', ')}`}>
+                  {seleccionados.map((id) => <i key={id}>{id}</i>)}
+                </div>
+              ) : (
+                <small>Elige una o varias ubicaciones</small>
+              )}
             </div>
 
             <dl className="seatpage-summary-details">
               <div><dt>Acceso</dt><dd>{nombreFicha}</dd></div>
-              <div><dt>Precio</dt><dd>${precioFicha.toLocaleString('es-MX')} MXN</dd></div>
+              <div><dt>Precio por lugar</dt><dd>${precioFicha.toLocaleString('es-MX')} MXN</dd></div>
+              <div><dt>Total</dt><dd>${montoTotal.toLocaleString('es-MX')} MXN</dd></div>
             </dl>
 
             <div className="seatpage-secure">
               <span aria-hidden="true">S</span>
-              <p><strong>Pago protegido por Stripe</strong><small>Tu asiento se confirma al completar el pago.</small></p>
+              <p><strong>Pago protegido por Stripe</strong><small>Tus lugares se confirman juntos al completar el pago.</small></p>
             </div>
           </aside>
         </div>
@@ -411,14 +438,14 @@ export default function SeatPicker() {
 
       <footer className="seatpage-actions">
         <div className="seatpage-actions-copy">
-          <strong>{seleccionado ? `Asiento ${seleccionado}` : 'Selecciona tu lugar'}</strong>
-          <span>{seleccionado ? `Ficha ${nombreFicha} · $${precioFicha.toLocaleString('es-MX')} MXN` : zonaDescripcion}</span>
+          <strong>{seleccionados.length ? `${seleccionados.length} ${seleccionados.length === 1 ? 'lugar' : 'lugares'} · ${seleccionados.join(', ')}` : 'Selecciona tus lugares'}</strong>
+          <span>{seleccionados.length ? `Ficha ${nombreFicha} · Total $${montoTotal.toLocaleString('es-MX')} MXN` : zonaDescripcion}</span>
         </div>
         <button type="button" className="seatmap-btn-ghost" onClick={() => router.push('/#pases')} disabled={pagando}>
           Atrás
         </button>
-        <button type="button" className="seatmap-btn-primary" onClick={pagar} disabled={!seleccionado || pagando}>
-          {pagando ? 'Redirigiendo…' : seleccionado ? `Pagar asiento ${seleccionado}` : 'Elige un asiento'}
+        <button type="button" className="seatmap-btn-primary" onClick={pagar} disabled={!seleccionados.length || pagando}>
+          {pagando ? 'Apartando tus lugares…' : seleccionados.length ? `Continuar · $${montoTotal.toLocaleString('es-MX')} MXN` : 'Elige al menos un lugar'}
         </button>
       </footer>
     </main>

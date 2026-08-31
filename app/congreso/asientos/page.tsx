@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import SeatPicker from './SeatPicker';
 
 export const metadata = {
-  title: 'Elige tu asiento · BIO SKIN Congress 2026',
+  title: 'Elige tus lugares · BIO SKIN Congress 2026',
 };
 
 export default function AsientosPage() {
