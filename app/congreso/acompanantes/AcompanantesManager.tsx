@@ -34,8 +34,13 @@ type Gestion = {
 
 async function respuestaJson<T>(url: string, init?: RequestInit): Promise<T> {
   const respuesta = await fetch(url, { cache: 'no-store', ...init });
-  const data = await respuesta.json().catch(() => ({}));
-  if (!respuesta.ok) throw new Error(data.error || 'No pudimos completar la solicitud');
+  const data: unknown = await respuesta.json().catch(() => ({}));
+  if (!respuesta.ok) {
+    const mensaje = data && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
+      ? data.error
+      : 'No pudimos completar la solicitud';
+    throw new Error(mensaje);
+  }
   return data as T;
 }
 
