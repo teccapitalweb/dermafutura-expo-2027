@@ -429,7 +429,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .seat-ocupado .seat-chair i { display:none; }
 .seat-ocupado .seat-chair { width:44px; height:43px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238b9294'%3E%3Ccircle cx='12' cy='7.5' r='4'/%3E%3Cpath d='M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5z'/%3E%3C/svg%3E") center/contain no-repeat; }
 .seat-reservado { --chair-fill:#c7cccd; --chair-edge:#7d8586; --chair-ink:#43494a; --chair-shadow:#9ea5a6; cursor:not-allowed; }
-.seat-ponente { --chair-fill:#111313; --chair-edge:#000; --chair-ink:#fff; --chair-shadow:#666d6e; cursor:not-allowed; }
+.seat-ponente { --chair-fill:#596163; --chair-edge:#343a3b; --chair-ink:#fff; --chair-shadow:#899193; cursor:not-allowed; }
 .seat-otra-zona { opacity:.17; filter:grayscale(1); cursor:not-allowed; }
 .seat:disabled:hover { transform:none; filter:none; }
 .seatmap-legend { display:flex; flex-wrap:wrap; justify-content:center; gap:12px 20px; margin:25px 0 0; border-top:1px solid var(--seat-line); padding-top:20px; color:var(--seat-smoke); font-size:8px; }
@@ -438,7 +438,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .demo-seleccionado { border-color:#032f34; background:var(--seat-merlot); box-shadow:0 2px 0 var(--seat-bronze); }
 .demo-reservado { border-color:#7d8586; background:#c7cccd; box-shadow:0 2px 0 #9ea5a6; }
 .demo-ocupado { border-color:#858c8e; background:#b9bfc0; box-shadow:0 2px 0 #9ca2a3; }
-.demo-ponente { background:#111313; box-shadow:0 2px 0 #666d6e; }
+.demo-ponente { border-color:#343a3b; background:#596163; box-shadow:0 2px 0 #899193; }
 .demo-otra { opacity:.23; }
 .seatmap-error { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:17px 0 0; border:1px solid #7d8586; padding:10px 12px; background:#f2f4f4; color:#2f3536; font-size:9px; text-align:left; }
 .seatmap-error button { min-height:32px; flex:0 0 auto; border:1px solid var(--seat-ink); padding:0 12px; background:var(--seat-ink); color:var(--seat-white); font-size:7px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
