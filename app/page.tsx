@@ -1,5 +1,6 @@
 import CongresoTickets from './components/CongresoTickets';
 import CongresoPurchaseStatus from './components/CongresoPurchaseStatus';
+import ScheduleList from './components/ScheduleList';
 import areas from '../data/hero-figuras.json';
 import faq from '../data/faq.json';
 import programa from '../data/programa.json';
@@ -111,7 +112,7 @@ export default function Home() {
 
       <section className="pillars ink-section"><div className="shell pillars-grid"><div><p className="section-tag mint">04 / La promesa</p><h2>TRES FORMAS<br />DE HACERLO<br /><em>DIFERENTE.</em></h2></div><div className="pillar-list">{pillars.map(([number,title,text])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p><i>↗</i></article>)}</div></div></section>
 
-      <section className="program paper-section" id="programa"><div className="program-watermark" aria-hidden="true">RUNWAY</div><div className="shell program-grid"><div className="program-intro"><p className="section-tag">05 / Programa</p><h2>Una jornada.<br /><em>Hora por hora.</em></h2><p>La agenda es conceptual. Los horarios, especialistas y formatos se sustituirán aquí cuando estén oficialmente confirmados.</p></div><div className="schedule">{programa.map((item,index)=><article key={item.id}><time>TBA — {String(index+1).padStart(2,'0')}</time><div><small>{item.type}</small><h3>{item.title}</h3><p>{item.status}</p></div><span>{index===2?'✦':'○'}</span></article>)}</div></div></section>
+      <section className="program paper-section" id="programa"><div className="program-watermark" aria-hidden="true">RUNWAY</div><div className="shell program-grid"><div className="program-intro"><p className="section-tag">05 / Programa</p><h2>Una jornada.<br /><em>Hora por hora.</em></h2><p>Un día completo de 9:00 a 16:00 h: conferencias, recorrido por stands, comida con show de medio tiempo y networking entre especialistas.</p></div><ScheduleList /></div></section>
 
       <section className="audience ink-section" id="publicos"><div className="audience-word" aria-hidden="true">FOR YOU</div><div className="shell audience-grid"><div className="audience-intro"><p className="section-tag mint">06 / Para quién</p><h2>PARA QUIENES<br />VEN MÁS ALLÁ<br /><em>DE LA SUPERFICIE.</em></h2></div><div className="audience-list">{audiences.map(([number,title,text])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
