@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 const WEBHOOK_SERVER = 'https://dermalysse-webhook-production.up.railway.app';
+const COMPRADOR_RECORDADO = 'dermafutura-congress-buyer-v1';
 
 type Comprador = { nombre: string; correo: string; telefono: string };
 type Asistente = {
@@ -76,6 +77,21 @@ export default function AcompanantesManager() {
     }
     void cargar(actual);
   }, [cargar]);
+
+  useEffect(() => {
+    const comprador = gestion?.alcance === 'compra' ? gestion.compra.comprador : null;
+    if (!comprador?.correo) return;
+    try {
+      localStorage.setItem(COMPRADOR_RECORDADO, JSON.stringify({
+        nombre: comprador.nombre,
+        correo: comprador.correo,
+        telefono: comprador.telefono,
+        guardadoEn: Date.now(),
+      }));
+    } catch {
+      // El modo privado puede impedir guardar datos; el formulario sigue funcionando normalmente.
+    }
+  }, [gestion]);
 
   const pendientes = useMemo(
     () => gestion?.asistentes.filter((asistente) => !asistente.nombre || !asistente.correo || !asistente.telefono).length || 0,

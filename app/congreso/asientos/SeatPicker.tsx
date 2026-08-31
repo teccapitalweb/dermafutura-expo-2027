@@ -29,6 +29,12 @@ type CheckoutPendiente = {
   ficha: 'ficha1' | 'ficha2';
   creadoEn: number;
 };
+type CompradorRecordado = {
+  nombre?: string;
+  correo?: string;
+  telefono?: string;
+  guardadoEn?: number;
+};
 
 const FALLBACK: Fichas = {
   ficha1Nombre: 'Especial',
@@ -49,6 +55,7 @@ const LAYOUT_INICIAL: FilaLayout[] = [
 ];
 const CACHE_SALA = 'bioskin-congress-seatmap-v2';
 const CHECKOUT_PENDIENTE = 'bioskin-congress-checkout-pending-v1';
+const COMPRADOR_RECORDADO = 'dermafutura-congress-buyer-v1';
 const VIGENCIA_CACHE_MS = 90_000;
 const MAX_ASIENTOS_GRUPO = 10;
 
@@ -239,6 +246,15 @@ export default function SeatPicker() {
     setPagando(true);
     setError('');
     try {
+      let comprador: CompradorRecordado | undefined;
+      try {
+        const recordado = JSON.parse(localStorage.getItem(COMPRADOR_RECORDADO) || 'null') as CompradorRecordado | null;
+        if (recordado?.correo && (!recordado.guardadoEn || Date.now() - recordado.guardadoEn < 180 * 24 * 60 * 60 * 1000)) {
+          comprador = recordado;
+        }
+      } catch {
+        // El almacenamiento puede estar desactivado; Stripe/Link continuará con su propio autocompletado.
+      }
       const data = await obtenerJson<{ url?: string; sessionId?: string; error?: string }>(`${WEBHOOK_SERVER}/create-checkout-session-congreso`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -248,6 +264,7 @@ export default function SeatPicker() {
           // una entrada individual, pero nunca interpretará un grupo como una sola.
           asiento: seleccionados.length === 1 ? seleccionados[0] : undefined,
           asientos: seleccionados,
+          comprador,
           successUrl: urlHome('?congreso=success'),
           cancelUrl: urlCancelacion(ficha),
         }),
