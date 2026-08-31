@@ -212,18 +212,61 @@ em { color:var(--rose); font-style:normal; font-weight:600; }
 .pillar-list i { position:absolute; top:20px; right:0; font-style:normal; }
 
 .program { position:relative; overflow:hidden; padding:160px 0; }
-.program-watermark { position:absolute; top:34px; right:-20px; color:rgba(8,22,19,.1); font-family:var(--font-outline),sans-serif; font-size:clamp(140px,21vw,340px); font-weight:400; letter-spacing:-.04em; line-height:.7; }
+.program-watermark { position:absolute; top:34px; right:-20px; color:rgba(8,22,19,.22); font-family:var(--font-outline),sans-serif; font-size:clamp(140px,21vw,340px); font-weight:400; letter-spacing:-.04em; line-height:.7; }
 .program-grid { position:relative; display:grid; grid-template-columns:.68fr 1.32fr; gap:100px; }
 .program-intro { position:sticky; top:140px; align-self:start; }
 .program-intro .section-tag { margin-bottom:36px; }
 .program-intro > p:last-child { max-width:420px; margin:35px 0 0; color:rgba(8,22,19,.6); font-size:13px; line-height:1.7; }
-.schedule { margin-top:210px; border-top:1px solid var(--line-dark); }
-.schedule article { display:grid; min-height:155px; grid-template-columns:130px 1fr 30px; align-items:center; gap:28px; border-bottom:1px solid var(--line-dark); }
-.schedule time { font-size:10px; font-weight:800; letter-spacing:.12em; }
-.schedule small { color:var(--berry); font-size:7px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
-.schedule h3 { margin:8px 0 5px; font-family:var(--font-display),serif; font-size:34px; font-weight:600; line-height:1; }
-.schedule p { margin:0; color:rgba(8,22,19,.48); font-size:9px; text-transform:uppercase; }
-.schedule > article > span { color:var(--rose-deep); font-size:22px; }
+/* MODIFICADO: título del programa con más presencia (no afecta a otros h2 que comparten la regla base) */
+.program-intro h2 { font-family:var(--font-sans),sans-serif; font-size:clamp(88px,10.5vw,190px); font-weight:800; letter-spacing:-.08em; line-height:.74; text-transform:uppercase; }
+.program-intro h2 em { display:block; color:var(--rose-deep); }
+
+/* MODIFICADO: horario tipo línea de tiempo, con clic para desplegar descripción y bloque en curso automático */
+.schedule { position:relative; display:grid; margin-top:110px; padding-left:40px; }
+.schedule::before { content:''; position:absolute; top:20px; bottom:20px; left:6px; width:1px; background:linear-gradient(180deg,transparent,var(--rose) 6%,var(--plum) 94%,transparent); }
+.schedule article { position:relative; display:grid; grid-template-columns:96px 1fr 32px; align-items:baseline; gap:30px; padding:28px 8px; border-bottom:1px solid var(--line-dark); cursor:pointer; opacity:0; transform:translateY(18px); animation:schedule-in .6s cubic-bezier(.16,1,.3,1) forwards; transition:padding-left .45s cubic-bezier(.16,1,.3,1),background .45s ease; }
+.schedule article:first-child { border-top:1px solid var(--line-dark); }
+.schedule article:nth-child(1){animation-delay:.04s}.schedule article:nth-child(2){animation-delay:.09s}.schedule article:nth-child(3){animation-delay:.14s}.schedule article:nth-child(4){animation-delay:.19s}.schedule article:nth-child(5){animation-delay:.24s}.schedule article:nth-child(6){animation-delay:.29s}.schedule article:nth-child(7){animation-delay:.34s}.schedule article:nth-child(8){animation-delay:.39s}.schedule article:nth-child(9){animation-delay:.44s}
+.schedule article::before { content:''; position:absolute; top:37px; left:-39px; width:11px; height:11px; border:1px solid var(--plum); border-radius:50%; background:var(--ivory); transition:transform .45s cubic-bezier(.34,1.56,.64,1),background .45s ease,border-color .45s ease,box-shadow .45s ease; z-index:2; }
+.schedule article:hover { padding-left:18px; background:rgba(20,184,166,.035); }
+.schedule article:hover::before { transform:scale(1.45); background:var(--rose); border-color:var(--rose); box-shadow:0 0 0 5px rgba(20,184,166,.14); }
+.schedule time { font-family:var(--font-sans),sans-serif; font-size:22px; font-weight:800; letter-spacing:-.04em; color:var(--rose-deep); font-variant-numeric:tabular-nums; transition:color .4s ease; }
+.schedule-main { min-width:0; }
+.schedule small { display:inline-block; margin-bottom:9px; color:var(--berry); font-size:9px; font-weight:800; letter-spacing:.22em; text-transform:uppercase; }
+.schedule h3 { margin:0; font-family:var(--font-sans),sans-serif; font-size:27px; font-weight:700; letter-spacing:-.035em; line-height:1.1; color:var(--ink); transition:color .4s ease; }
+.schedule article:hover h3 { color:var(--rose-deep); }
+.schedule article:hover time { color:var(--rose); }
+
+/* Nombre del ponente: siempre visible, debajo del título (no requiere clic) */
+.schedule-ponente { display:flex; align-items:center; gap:8px; margin-top:9px; }
+.schedule-ponente-avatar { display:grid; width:22px; height:22px; flex:0 0 22px; place-items:center; border:1px solid rgba(10,110,120,.35); border-radius:50%; background:rgba(20,184,166,.1); color:var(--rose-deep); font-family:var(--font-sans),sans-serif; font-size:8px; font-weight:800; }
+.schedule-ponente span { color:rgba(8,22,19,.62); font-size:12px; font-weight:600; }
+.schedule-ponente span em { color:rgba(8,22,19,.42); font-style:normal; font-weight:400; }
+
+.schedule-detalle { display:grid; grid-template-rows:0fr; opacity:0; transition:grid-template-rows .5s cubic-bezier(.16,1,.3,1),opacity .45s ease,margin-top .5s ease; }
+.schedule-detalle > p { overflow:hidden; margin:0; max-width:540px; color:rgba(8,22,19,.56); font-family:var(--font-display),serif; font-size:15px; font-style:italic; line-height:1.6; }
+.schedule-toggle { justify-self:end; align-self:center; display:grid; width:32px; height:32px; place-items:center; border:1px solid var(--line-dark); border-radius:50%; color:var(--rose-deep); font-size:18px; font-weight:300; line-height:1; transition:transform .5s cubic-bezier(.34,1.56,.64,1),border-color .45s ease,color .45s ease; }
+.schedule article:hover .schedule-toggle { border-color:var(--rose); }
+
+/* --- Abierto: despliega descripción + nodo encendido --- */
+.schedule .is-open { background:rgba(20,184,166,.05); }
+.schedule .is-open::before { transform:scale(1.45); background:var(--rose); border-color:var(--rose); box-shadow:0 0 0 5px rgba(20,184,166,.16); }
+.schedule .is-open .schedule-detalle { grid-template-rows:1fr; margin-top:14px; opacity:1; }
+.schedule .is-open .schedule-toggle { transform:rotate(135deg); border-color:var(--rose); color:var(--rose); }
+.schedule .is-open h3 { color:var(--rose-deep); }
+
+/* --- Destacados (stands, comida): nodo en menta --- */
+.schedule .is-featured::before { background:var(--rose); border-color:var(--rose); box-shadow:0 0 0 4px rgba(20,184,166,.14); }
+
+/* --- En curso: se activa/desactiva solo según la hora real --- */
+.schedule .is-now { background:rgba(20,184,166,.09); }
+.schedule .is-now::before { background:var(--rose); border-color:var(--rose); box-shadow:0 0 0 6px rgba(20,184,166,.18); animation:schedule-live-ring 2.2s ease-in-out infinite; }
+.schedule .is-now h3 { color:var(--rose-deep); }
+.schedule-live { display:inline-flex; align-items:center; gap:6px; margin-left:10px; padding:3px 10px; border-radius:999px; background:rgba(20,184,166,.14); color:var(--rose-deep); font-family:var(--font-sans),sans-serif; font-size:8px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; vertical-align:middle; }
+.schedule-live i { width:6px; height:6px; border-radius:50%; background:var(--rose); animation:schedule-live-pulse 1.3s ease-in-out infinite; }
+@keyframes schedule-live-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.72); } }
+@keyframes schedule-live-ring { 0%,100% { box-shadow:0 0 0 6px rgba(20,184,166,.18); } 50% { box-shadow:0 0 0 9px rgba(20,184,166,.08); } }
+@keyframes schedule-in { to { opacity:1; transform:translateY(0); } }
 
 .audience { position:relative; overflow:hidden; padding:150px 0; }
 .audience-word { position:absolute; right:-1%; bottom:-3%; color:rgba(255,255,255,.035); font-size:clamp(170px,24vw,400px); font-weight:800; letter-spacing:-.12em; line-height:.7; white-space:nowrap; }
@@ -321,11 +364,11 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
   .hero-footnote { bottom:0; padding:10px 86px 10px 8px; background:rgba(12,7,10,.76); font-size:6px; line-height:1.5; }
   .opening,.voices,.runway,.pillars,.program,.audience,.venue,.partners,.interest,.faq { padding-block:95px; }
   .opening-grid { gap:38px; padding-bottom:80px; }.opening-title h2 { font-size:19vw; }.opening-title em { font-size:15vw; }.opening-copy p { font-size:21px; }.editorial-ribbon { font-size:44px; }
-  .voices-head { gap:28px; margin-bottom:50px; }.voices-head h2,.program-intro h2,.venue h2 { font-size:17vw; }.voices-poster { min-height:530px; }.voices-poster img { right:-21%; width:145%; }.poster-word { font-size:105px; }
+  .voices-head { gap:28px; margin-bottom:50px; }.voices-head h2,.venue h2 { font-size:17vw; }.program-intro h2 { font-size:19vw; }.voices-poster { min-height:530px; }.voices-poster img { right:-21%; width:145%; }.poster-word { font-size:105px; }
   .voice-list article { min-height:104px; grid-template-columns:36px 1fr 15px; gap:12px; padding:14px 6px; }.voice-list h3 { font-size:24px; }.voice-list > article > span { font-size:23px; }
   .runway-head { display:block; margin-bottom:45px; }.runway-head h2 { margin-top:32px; font-size:17vw; text-align:left; }.runway-track { width:calc(100% - 18px); grid-template-columns:repeat(6,78vw); }.runway-image { height:430px; }
   .pillars h2,.audience-intro h2,.partners-head h2 { font-size:15vw; }.pillar-list article { grid-template-columns:45px 1fr; gap:14px; padding-block:24px; }.pillar-list h3 { font-size:28px; }.pillar-list p { grid-column:2; }.pillar-list i { display:none; }
-  .schedule article { min-height:145px; grid-template-columns:78px 1fr 15px; gap:12px; }.schedule h3 { font-size:27px; }
+  .schedule { margin-top:50px; padding-left:28px; }.schedule article { grid-template-columns:60px 1fr 26px; gap:15px; padding:22px 4px; }.schedule article::before { left:-27px; top:26px; }.schedule time { font-size:18px; }.schedule h3 { font-size:20px; }.schedule small { font-size:8px; }.schedule-ponente span { font-size:11px; }.schedule-live { margin-left:0; margin-top:6px; }.schedule-detalle > p { font-size:13px; }.schedule-toggle { width:26px; height:26px; font-size:16px; }.schedule article:hover { padding-left:8px; }
   .audience-list { grid-template-columns:1fr; }.audience-list article { min-height:165px; }.audience-list h3 { margin-top:28px; }
   .passes { min-height:auto; }.pass-editorial { padding:95px 18px 70px; }.pass-editorial h2 { font-size:24vw; }.pass-card { margin:0; padding:28px 18px 38px; }.pass-price strong { font-size:15vw; }.pass-card ul { grid-template-columns:1fr; }
   .venue-grid { gap:55px; }.venue-card { padding:28px 22px; }.venue-card strong { font-size:31px; }
@@ -540,6 +583,8 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 }
 
 @media (prefers-reduced-motion:reduce) {
+  .schedule article { opacity:1; transform:none; animation:none; }
+  .schedule-live i,.schedule .is-now::before { animation:none; }
   .seatpage-loading > span { animation:none; }
   .seatmap-sync > span { animation:none; }
   .seat,.seatmap-btn-primary,.seatmap-btn-ghost,.seatpage-back { transition:none; }
