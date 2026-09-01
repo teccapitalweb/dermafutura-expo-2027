@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const WEBHOOK_SERVER = 'https://dermalysse-webhook-production.up.railway.app';
 const COMPRADOR_RECORDADO = 'dermafutura-congress-buyer-v1';
@@ -58,7 +58,7 @@ export default function AcompanantesManager() {
   const [token, setToken] = useState('');
   const [gestion, setGestion] = useState<Gestion | null>(null);
   const [cargando, setCargando] = useState(true);
-  const [guardando, setGuardando] = useState(false);
+  const [guardandoId, setGuardandoId] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
   const [invitando, setInvitando] = useState('');
@@ -129,9 +129,10 @@ export default function AcompanantesManager() {
     setMensaje('Copiamos el correo y teléfono del comprador. Solo falta escribir el nombre de esta persona.');
   }
 
-  async function guardar(finalizar: boolean, mostrarMensaje = true): Promise<boolean> {
+  async function guardar(asistentes: Asistente[], finalizar: boolean, mostrarMensaje = true): Promise<boolean> {
     if (!gestion || !token) return false;
-    setGuardando(true);
+    const idsGuardados = new Set(asistentes.map((asistente) => asistente.registroId));
+    setGuardandoId(asistentes[0]?.registroId || 'grupo');
     setError('');
     setMensaje('');
     try {
@@ -140,27 +141,30 @@ export default function AcompanantesManager() {
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ finalizar, asistentes: gestion.asistentes })
+          body: JSON.stringify({ finalizar, asistentes })
         }
       );
-      setGestion(data);
+      setGestion((actual) => actual ? {
+        ...data,
+        asistentes: data.asistentes.map((servidor) => idsGuardados.has(servidor.registroId)
+          ? servidor
+          : actual.asistentes.find((local) => local.registroId === servidor.registroId) || servidor)
+      } : data);
       if (mostrarMensaje) {
-        setMensaje(finalizar
-          ? 'Los datos quedaron guardados y ya aparecen en el administrador.'
-          : 'Guardamos tu avance. Puedes cerrar esta página y regresar desde el mismo enlace.');
+        setMensaje(`Guardamos los cambios del asiento ${asistentes[0]?.asiento || ''}. Los demás formularios no se modificaron.`);
       }
       return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No pudimos guardar los datos');
       return false;
     } finally {
-      setGuardando(false);
+      setGuardandoId('');
     }
   }
 
   async function enviarInvitacion(asistente: Asistente) {
     if (!token) return;
-    const guardado = await guardar(false, false);
+    const guardado = await guardar([asistente], false, false);
     if (!guardado) return;
     setInvitando(asistente.registroId);
     setError('');
@@ -183,11 +187,6 @@ export default function AcompanantesManager() {
     } finally {
       setInvitando('');
     }
-  }
-
-  function enviarFormulario(event: FormEvent) {
-    event.preventDefault();
-    void guardar(true);
   }
 
   if (cargando) {
@@ -232,7 +231,7 @@ export default function AcompanantesManager() {
           </aside>
         </section>
 
-        <form className="attendee-form" onSubmit={enviarFormulario}>
+        <div className="attendee-form">
           <div className="attendee-list">
             {gestion.asistentes.map((asistente, index) => {
               const completo = asistente.datosEstado === 'completo';
@@ -275,10 +274,17 @@ export default function AcompanantesManager() {
                     <span>Autorizo que estos datos se utilicen para mi tarjeta virtual. Puedo asistir aunque no active esta opción.</span>
                   </label>
 
+                  <div className="attendee-card-actions">
+                    <div><strong>Guarda únicamente este asiento</strong><span>Puedes dejar los demás pendientes y volver cuando quieras.</span></div>
+                    <button type="button" disabled={Boolean(guardandoId)} onClick={() => void guardar([asistente], true)}>
+                      {guardandoId === asistente.registroId ? 'Guardando…' : `Guardar cambios de ${asistente.asiento}`}
+                    </button>
+                  </div>
+
                   {!asistente.esComprador && gestion.alcance === 'compra' ? (
                     <div className="attendee-share">
                       <p><strong>¿Prefieres que esta persona lo rellene?</strong><span>Escribe su correo arriba o copia un enlace para enviarlo por tu cuenta.</span></p>
-                      <button type="button" disabled={Boolean(invitando) || guardando} onClick={() => void enviarInvitacion(asistente)}>
+                      <button type="button" disabled={Boolean(invitando) || Boolean(guardandoId)} onClick={() => void enviarInvitacion(asistente)}>
                         {invitando === asistente.registroId ? 'Preparando…' : asistente.correo ? 'Enviar enlace individual' : 'Copiar enlace individual'}
                       </button>
                     </div>
@@ -291,12 +297,10 @@ export default function AcompanantesManager() {
           {error ? <p className="attendee-message error" role="alert">{error}</p> : null}
           {mensaje ? <p className="attendee-message success" role="status">{mensaje}</p> : null}
 
-          <footer className="attendee-actions">
-            <div><strong>No necesitas terminar ahora.</strong><span>El botón “Guardar y rellenar después” conserva incluso formularios incompletos.</span></div>
-            <button className="attendee-later" type="button" disabled={guardando} onClick={() => void guardar(false)}>{guardando ? 'Guardando…' : 'Guardar y rellenar después'}</button>
-            <button className="attendee-finish" type="submit" disabled={guardando}>{guardando ? 'Guardando…' : 'Confirmar lo capturado'}</button>
+          <footer className="attendee-actions attendee-actions-info">
+            <div><strong>Cada asistente se guarda por separado.</strong><span>No necesitas completar todo el grupo: usa el botón de la persona cuyos datos acabas de capturar.</span></div>
           </footer>
-        </form>
+        </div>
 
         <p className="attendee-security">Tus datos no aparecen en el mapa público. Solo recepción puede consultar el registro completo.</p>
       </div>

@@ -648,6 +648,13 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 .attendee-actions > div span { color:rgba(8,22,19,.55); font-size:8px; line-height:1.4; }
 .attendee-actions button { min-height:48px; border:1px solid var(--ink); padding:0 18px; font-size:7px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
 .attendee-actions button:disabled { opacity:.5; cursor:wait; }
+.attendee-card-actions { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:18px; border:1px solid rgba(8,22,19,.16); padding:14px 16px; background:#f7faf9; }
+.attendee-card-actions > div { display:grid; gap:4px; }
+.attendee-card-actions strong { font-size:9px; letter-spacing:.08em; text-transform:uppercase; }
+.attendee-card-actions span { color:rgba(8,22,19,.58); font-size:8px; line-height:1.45; }
+.attendee-card-actions button { min-height:44px; border:1px solid var(--ink); padding:0 18px; background:var(--ink); color:#fff; font-size:7px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
+.attendee-card-actions button:disabled { opacity:.5; cursor:wait; }
+.attendee-actions-info { grid-template-columns:1fr; position:static; }
 .attendee-later { background:#fff; color:var(--ink); }
 .attendee-finish { background:var(--ink); color:#fff; box-shadow:5px 5px 0 var(--mint); }
 .attendee-security { margin:25px 0 12px; color:rgba(8,22,19,.52); font-size:8px; text-align:center; }
@@ -675,6 +682,8 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
   .attendee-actions { position:static; grid-template-columns:1fr; }
   .attendee-actions > div { padding:4px; }
   .attendee-actions button { width:100%; }
+  .attendee-card-actions { align-items:stretch; flex-direction:column; }
+  .attendee-card-actions button { width:100%; }
 }
 
 @media (prefers-reduced-motion:reduce) {
