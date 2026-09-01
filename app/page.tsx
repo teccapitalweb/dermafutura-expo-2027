@@ -20,6 +20,27 @@ const audiences = [
   ['06', 'Industria', 'Laboratorios, dispositivos y aliados de innovación.'],
 ];
 
+const speakers = [
+  {
+    id: 'alejandro-yoshua-juarez-victoria',
+    name: 'Dr. Alejandro Yoshua Juárez Victoria',
+    role: 'Ponente confirmado',
+    image: '/images/ponentes/alejandro-yoshua-juarez-victoria.png?v=20260901-2',
+  },
+  {
+    id: 'diana-lopez-montiel',
+    name: 'Diana López Montiel',
+    role: 'Fisioterapéutica para el cuidado de la piel',
+    image: '/images/ponentes/diana-lopez-montiel.png?v=20260901-2',
+  },
+  {
+    id: 'edgar-ivan-chavez-monterrosa',
+    name: 'Dr. Edgar Iván Chávez Monterrosa',
+    role: 'Médico estético',
+    image: '/images/ponentes/edgar-ivan-chavez-monterrosa.png?v=20260901-2',
+  },
+];
+
 function PromoVideo() {
   return (
     <section className="promo-film" id="video" aria-labelledby="promo-film-title">
@@ -91,8 +112,16 @@ export default function Home() {
         <div className="hero-editorial shell">
           <div className="hero-word hero-word-one" aria-hidden="true">BIO</div><div className="hero-word hero-word-two" aria-hidden="true">SKIN</div><div className="hero-word hero-word-three" aria-label="BIO SKIN Congress 2026">CONGRESS <span>2026</span></div>
           <div className="hero-cta"><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
-          <div className="hero-cast" aria-label="Casting editorial conceptual de BIO SKIN Congress"><div className="cast-aura" aria-hidden="true" /><img className="hero-cast-image" src="/images/hero-cast-v3.png" alt="Seis mujeres adultas jóvenes en una composición editorial de moda médica" fetchPriority="high" /></div>
-          <div className="hero-footnote"><p>Casting visual conceptual · No son ponentes confirmadas</p></div>
+          <div className="hero-cast" aria-label="Ponentes confirmados de BIO SKIN Congress">
+            <div className="cast-aura" aria-hidden="true" />
+            {speakers.map((speaker, index) => (
+              <article className={`hero-speaker hero-speaker-${index + 1}`} key={speaker.id} tabIndex={0}>
+                <img src={speaker.image} alt={`Retrato de ${speaker.name}`} fetchPriority={index === 1 ? 'high' : 'auto'} />
+                <div className="hero-speaker-label"><span>0{index + 1} · Ponente</span><strong>{speaker.name}</strong><small>{speaker.role}</small></div>
+              </article>
+            ))}
+          </div>
+          <div className="hero-footnote"><p>Ponentes confirmados · BIO SKIN Congress 2026</p></div>
         </div>
       </section>
 
@@ -104,8 +133,16 @@ export default function Home() {
       </section>
 
       <section className="voices ink-section" id="voces">
-        <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>La estructura está preparada para recibir fotografía, nombre, especialidad y tema de cada ponente confirmado. Por ahora presentamos el casting visual y las seis conversaciones que queremos abrir.</p></div>
-        <div className="shell voices-spread"><figure className="voices-poster"><span className="poster-label">The future issue · 2026</span><div className="poster-word" aria-hidden="true">VOICES</div><img src="/images/hero-cast-v3.png" alt="Casting conceptual de seis futuras voces de BIO SKIN Congress" loading="lazy" /><figcaption>Casting conceptual · Identidades reales por confirmar</figcaption></figure><div className="voice-list">{areas.map((area,index)=><article key={area.id}><span>0{index+1}</span><div><small>Voz por anunciar</small><h3>{area.name}</h3><p>{area.kicker}</p></div><i>↗</i></article>)}</div></div>
+        <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>Conoce a los primeros especialistas confirmados para una conversación contemporánea sobre ciencia, innovación y cuidado de la piel.</p></div>
+        <div className="shell confirmed-speakers" aria-label="Ponentes confirmados">
+          {speakers.map((speaker, index) => (
+            <article className="confirmed-speaker" key={speaker.id} tabIndex={0}>
+              <span className="confirmed-speaker-number" aria-hidden="true">0{index + 1}</span>
+              <img src={speaker.image} alt={`Retrato de ${speaker.name}`} loading="lazy" />
+              <div className="confirmed-speaker-copy"><small>Ponente confirmado</small><h3>{speaker.name}</h3><p>{speaker.role}</p></div>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="runway paper-section" id="temas"><div className="shell runway-head"><p className="section-tag">03 / El universo</p><h2>SEIS MIRADAS.<br /><span>UNA MISMA PIEL.</span></h2></div><div className="runway-track">{areas.map((area,index)=><article className="runway-card" key={area.id}><div className={`runway-image real-person real-person-${index+1}`} role="img" aria-label={`Retrato editorial conceptual para ${area.name}`}><b>0{index+1}</b><small>Casting visual</small></div><h3>{area.name}</h3><p>{area.description}</p></article>)}</div><p className="runway-disclaimer shell">Retratos conceptuales generados para comunicar las áreas · No representan ponentes confirmados</p></section>
