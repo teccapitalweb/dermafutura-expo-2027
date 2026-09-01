@@ -114,12 +114,14 @@ export default function Home() {
           <div className="hero-cta"><div className="hero-actions"><a className="button button-primary" href="#voces">Explorar las voces</a><a className="button button-ghost" href="#interes">Recibir noticias</a></div></div>
           <div className="hero-cast" aria-label="Ponentes confirmados de BIO SKIN Congress">
             <div className="cast-aura" aria-hidden="true" />
-            {speakers.map((speaker, index) => (
-              <article className={`hero-speaker hero-speaker-${index + 1}`} key={speaker.id} tabIndex={0}>
-                <img src={speaker.image} alt={`Retrato de ${speaker.name}`} fetchPriority={index === 1 ? 'high' : 'auto'} />
-                <div className="hero-speaker-label"><span>0{index + 1} · Ponente</span><strong>{speaker.name}</strong><small>{speaker.role}</small></div>
-              </article>
-            ))}
+            <img className="hero-cast-people" src="/images/ponentes/ponentes-hero-sin-huecos-v7.png" alt="Dr. Alejandro Yoshua Juárez Victoria, Diana López Montiel y Dr. Edgar Iván Chávez Monterrosa" fetchPriority="high" />
+            <div className="hero-speaker-zones">
+              {speakers.map((speaker, index) => (
+                <article className={`hero-speaker-zone hero-speaker-zone-${index + 1}`} key={speaker.id} tabIndex={0} aria-label={`Ver información de ${speaker.name}`}>
+                  <div className="hero-speaker-label"><span>0{index + 1} · Ponente</span><strong>{speaker.name}</strong><small>{speaker.role}</small></div>
+                </article>
+              ))}
+            </div>
           </div>
           <div className="hero-footnote"><p>Ponentes confirmados · BIO SKIN Congress 2026</p></div>
         </div>

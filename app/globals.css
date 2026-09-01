@@ -50,21 +50,21 @@ em { color:var(--rose); font-style:normal; font-weight:600; }
 .hero-actions { display:flex; flex-wrap:wrap; gap:11px; }
 .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:0 21px; border-radius:999px; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
 .button-primary { background:var(--ivory); color:var(--ink); } .button-ghost { border:1px solid rgba(255,255,255,.3); }
-.hero-cast { position:absolute; z-index:7; top:17%; right:-3%; width:min(61vw,880px); height:78%; }
+.hero-cast { position:absolute; z-index:7; top:17%; right:-7%; width:min(61vw,880px); height:78%; animation:hero-speaker-float 6.2s ease-in-out infinite; }
 .cast-aura { position:absolute; z-index:-1; top:19%; right:13%; width:66%; aspect-ratio:1.3; border-radius:50%; background:radial-gradient(circle,rgba(20,184,166,.32),rgba(11,79,72,.12) 48%,transparent 71%); filter:blur(12px); }
-.hero-speaker { position:absolute; bottom:-1%; height:88%; outline:none; cursor:pointer; isolation:isolate; transition:z-index 0s .25s; }
-.hero-speaker-1 { z-index:3; left:1%; width:42%; }
-.hero-speaker-2 { z-index:5; left:29%; width:43%; height:94%; }
-.hero-speaker-3 { z-index:4; right:-1%; width:42%; }
-.hero-speaker img { position:absolute; z-index:1; right:50%; bottom:0; width:auto; max-width:none; height:100%; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 38px 38px rgba(0,0,0,.5)); translate:50% 0; transition:filter .42s ease,opacity .42s ease,transform .42s cubic-bezier(.2,.75,.2,1); }
+.hero-cast-people { position:absolute; z-index:1; right:0; bottom:0; width:100%; max-width:none; }
+.hero-speaker-zones { position:absolute; z-index:2; inset:0; }
+.hero-speaker-zone { position:absolute; top:5%; bottom:0; width:33.333%; outline:none; cursor:pointer; }
+.hero-speaker-zone-1 { left:0; }
+.hero-speaker-zone-2 { left:33.333%; }
+.hero-speaker-zone-3 { right:0; }
 .hero-speaker-label { position:absolute; z-index:30; right:2%; bottom:10%; width:min(310px,88%); border:1px solid rgba(127,230,194,.4); border-left:4px solid var(--mint); padding:16px 18px; background:#06110e; box-shadow:0 22px 58px rgba(0,0,0,.62); opacity:0; transform:translateY(14px); transition:.32s ease; }
 .hero-speaker-label span,.hero-speaker-label small { display:block; color:var(--mint); font-size:6px; font-weight:800; letter-spacing:.16em; line-height:1.45; text-transform:uppercase; }
 .hero-speaker-label strong { display:block; margin:7px 0; color:#fff; font-family:var(--font-display),serif; font-size:clamp(20px,1.9vw,30px); font-weight:600; letter-spacing:-.04em; line-height:.92; }
 .hero-speaker-label small { color:rgba(255,255,255,.55); letter-spacing:.08em; }
-.hero-cast:has(.hero-speaker:hover) .hero-speaker:not(:hover) img,.hero-cast:has(.hero-speaker:focus-visible) .hero-speaker:not(:focus-visible) img { filter:grayscale(.9) brightness(.44) drop-shadow(0 28px 28px rgba(0,0,0,.5)); opacity:.72; transform:scale(.96); }
-.hero-speaker:hover,.hero-speaker:focus-visible { z-index:20; transition-delay:0s; }
-.hero-speaker:hover img,.hero-speaker:focus-visible img { filter:drop-shadow(0 52px 55px rgba(0,0,0,.62)); transform:translateY(-12px) scale(1.055); }
-.hero-speaker:hover .hero-speaker-label,.hero-speaker:focus-visible .hero-speaker-label { opacity:1; transform:translateY(0); }
+.hero-speaker-zone:hover,.hero-speaker-zone:focus-visible { z-index:20; }
+.hero-speaker-zone:hover .hero-speaker-label,.hero-speaker-zone:focus-visible .hero-speaker-label { opacity:1; transform:translateY(0); }
+@keyframes hero-speaker-float { 0%,100% { transform:translateY(5px); } 50% { transform:translateY(-11px); } }
 .hero-footnote { position:absolute; z-index:18; right:0; bottom:26px; left:0; border-top:1px solid rgba(255,255,255,.16); padding-top:13px; color:rgba(255,255,255,.38); font-size:7px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
 .hero-footnote p { margin:0; }
 
@@ -598,6 +598,7 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
 }
 
 @media (prefers-reduced-motion:reduce) {
+  .hero-cast { animation:none; }
   .schedule article { opacity:1; transform:none; animation:none; }
   .schedule-live i,.schedule .is-now::before { animation:none; }
   .seatpage-loading > span { animation:none; }
