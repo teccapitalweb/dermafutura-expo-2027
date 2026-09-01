@@ -12,9 +12,18 @@ type Asistente = {
   nombre: string;
   correo: string;
   telefono: string;
+  cargo: string;
   empresa: string;
+  bio: string;
+  sitioWeb: string;
   linkedinWeb: string;
   instagram: string;
+  mostrarCorreo: boolean;
+  mostrarTelefono: boolean;
+  mostrarSitioWeb: boolean;
+  mostrarLinkedin: boolean;
+  mostrarInstagram: boolean;
+  tarjetaVisible: boolean;
   consentimientoPublicacion: boolean;
   datosEstado: 'completo' | 'pendiente';
   esComprador: boolean;
@@ -94,7 +103,7 @@ export default function AcompanantesManager() {
   }, [gestion]);
 
   const pendientes = useMemo(
-    () => gestion?.asistentes.filter((asistente) => !asistente.nombre || !asistente.correo || !asistente.telefono).length || 0,
+    () => gestion?.asistentes.filter((asistente) => asistente.datosEstado !== 'completo').length || 0,
     [gestion]
   );
 
@@ -137,7 +146,7 @@ export default function AcompanantesManager() {
       setGestion(data);
       if (mostrarMensaje) {
         setMensaje(finalizar
-          ? 'Los datos quedaron completos y ya aparecen en el administrador.'
+          ? 'Los datos quedaron guardados y ya aparecen en el administrador.'
           : 'Guardamos tu avance. Puedes cerrar esta página y regresar desde el mismo enlace.');
       }
       return true;
@@ -226,7 +235,7 @@ export default function AcompanantesManager() {
         <form className="attendee-form" onSubmit={enviarFormulario}>
           <div className="attendee-list">
             {gestion.asistentes.map((asistente, index) => {
-              const completo = Boolean(asistente.nombre && asistente.correo && asistente.telefono);
+              const completo = asistente.datosEstado === 'completo';
               return (
                 <article className="attendee-card" key={asistente.registroId}>
                   <div className="attendee-card-head">
@@ -241,12 +250,24 @@ export default function AcompanantesManager() {
                   ) : null}
 
                   <div className="attendee-grid">
-                    <label className="attendee-wide"><span>Nombre completo *</span><input value={asistente.nombre} onChange={(event) => actualizar(asistente.registroId, 'nombre', event.target.value)} autoComplete="name" placeholder="Nombre y apellidos" /></label>
-                    <label><span>Correo electrónico *</span><input type="email" value={asistente.correo} onChange={(event) => actualizar(asistente.registroId, 'correo', event.target.value)} autoComplete="email" placeholder="nombre@correo.com" /></label>
-                    <label><span>Teléfono *</span><input type="tel" value={asistente.telefono} onChange={(event) => actualizar(asistente.registroId, 'telefono', event.target.value)} autoComplete="tel" placeholder="+52" /></label>
-                    <label className="attendee-wide"><span>Empresa o consultorio <em>Opcional</em></span><input value={asistente.empresa} onChange={(event) => actualizar(asistente.registroId, 'empresa', event.target.value)} autoComplete="organization" placeholder="Puedes dejarlo vacío" /></label>
-                    <label><span>LinkedIn o sitio web <em>Opcional</em></span><input value={asistente.linkedinWeb} onChange={(event) => actualizar(asistente.registroId, 'linkedinWeb', event.target.value)} autoComplete="url" placeholder="https://" /></label>
+                    <label className="attendee-wide"><span>Nombre completo <em>Opcional</em></span><input value={asistente.nombre} onChange={(event) => actualizar(asistente.registroId, 'nombre', event.target.value)} autoComplete="name" placeholder="Nombre y apellidos" /></label>
+                    <label><span>Correo electrónico <em>Opcional</em></span><input type="email" value={asistente.correo} onChange={(event) => actualizar(asistente.registroId, 'correo', event.target.value)} autoComplete="email" placeholder="nombre@correo.com" /></label>
+                    <label><span>Teléfono <em>Opcional</em></span><input type="tel" value={asistente.telefono} onChange={(event) => actualizar(asistente.registroId, 'telefono', event.target.value)} autoComplete="tel" placeholder="+52" /></label>
+                    <label><span>Cargo o especialidad <em>Opcional</em></span><input value={asistente.cargo} onChange={(event) => actualizar(asistente.registroId, 'cargo', event.target.value)} placeholder="Dermatóloga, especialista…" /></label>
+                    <label><span>Empresa o consultorio <em>Opcional</em></span><input value={asistente.empresa} onChange={(event) => actualizar(asistente.registroId, 'empresa', event.target.value)} autoComplete="organization" placeholder="Empresa o lugar de trabajo" /></label>
+                    <label className="attendee-wide"><span>Presentación breve <em>Opcional</em></span><textarea rows={3} value={asistente.bio} onChange={(event) => actualizar(asistente.registroId, 'bio', event.target.value)} placeholder="Descripción profesional breve" /></label>
+                    <label><span>Sitio web <em>Opcional</em></span><input value={asistente.sitioWeb} onChange={(event) => actualizar(asistente.registroId, 'sitioWeb', event.target.value)} autoComplete="url" placeholder="https://" /></label>
+                    <label><span>LinkedIn <em>Opcional</em></span><input value={asistente.linkedinWeb} onChange={(event) => actualizar(asistente.registroId, 'linkedinWeb', event.target.value)} autoComplete="url" placeholder="Perfil profesional" /></label>
                     <label><span>Instagram <em>Opcional</em></span><input value={asistente.instagram} onChange={(event) => actualizar(asistente.registroId, 'instagram', event.target.value)} autoComplete="off" placeholder="@usuario" /></label>
+                  </div>
+
+                  <div className="attendee-privacy">
+                    <label><input type="checkbox" checked={asistente.mostrarCorreo} onChange={(event) => actualizar(asistente.registroId, 'mostrarCorreo', event.target.checked)} />Mostrar correo</label>
+                    <label><input type="checkbox" checked={asistente.mostrarTelefono} onChange={(event) => actualizar(asistente.registroId, 'mostrarTelefono', event.target.checked)} />Mostrar teléfono</label>
+                    <label><input type="checkbox" checked={asistente.mostrarSitioWeb} onChange={(event) => actualizar(asistente.registroId, 'mostrarSitioWeb', event.target.checked)} />Mostrar sitio web</label>
+                    <label><input type="checkbox" checked={asistente.mostrarLinkedin} onChange={(event) => actualizar(asistente.registroId, 'mostrarLinkedin', event.target.checked)} />Mostrar LinkedIn</label>
+                    <label><input type="checkbox" checked={asistente.mostrarInstagram} onChange={(event) => actualizar(asistente.registroId, 'mostrarInstagram', event.target.checked)} />Mostrar Instagram</label>
+                    <label><input type="checkbox" checked={asistente.tarjetaVisible} onChange={(event) => actualizar(asistente.registroId, 'tarjetaVisible', event.target.checked)} />Tarjeta visible</label>
                   </div>
 
                   <label className="attendee-consent">
@@ -273,7 +294,7 @@ export default function AcompanantesManager() {
           <footer className="attendee-actions">
             <div><strong>No necesitas terminar ahora.</strong><span>El botón “Guardar y rellenar después” conserva incluso formularios incompletos.</span></div>
             <button className="attendee-later" type="button" disabled={guardando} onClick={() => void guardar(false)}>{guardando ? 'Guardando…' : 'Guardar y rellenar después'}</button>
-            <button className="attendee-finish" type="submit" disabled={guardando}>{guardando ? 'Guardando…' : pendientes ? 'Guardar datos completos' : 'Confirmar datos'}</button>
+            <button className="attendee-finish" type="submit" disabled={guardando}>{guardando ? 'Guardando…' : 'Confirmar lo capturado'}</button>
           </footer>
         </form>
 
