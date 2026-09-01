@@ -130,8 +130,6 @@ export default function SeatPicker() {
   const [pagando, setPagando] = useState(false);
   const [error, setError] = useState('');
   const liberandoReserva = useRef(false);
-  const ventanaStripe = useRef<Window | null>(null);
-  const monitorStripe = useRef<number | null>(null);
 
   useEffect(() => {
     if (!ficha) { router.replace('/#pases'); return; }
@@ -247,24 +245,10 @@ export default function SeatPicker() {
     return () => window.removeEventListener('pageshow', alVolverDeStripe);
   }, [ficha, checkoutCancelado, liberarReservaPendiente]);
 
-  useEffect(() => () => {
-    if (monitorStripe.current !== null) window.clearInterval(monitorStripe.current);
-  }, []);
-
   if (!ficha) return null; // se redirige en el useEffect de arriba
 
   async function pagar() {
     if (!ficha || seleccionados.length === 0) return;
-    // Mantener el selector abierto permite detectar que la persona cerró
-    // Stripe y liberar inmediatamente el grupo. Si el navegador bloquea la
-    // pestaña, se conserva el flujo anterior en esta misma ventana.
-    const popupStripe = window.open('', 'dermafutura-stripe-checkout');
-    if (popupStripe) {
-      popupStripe.document.title = 'Preparando pago seguro';
-      popupStripe.document.body.style.fontFamily = 'Arial, sans-serif';
-      popupStripe.document.body.style.padding = '32px';
-      popupStripe.document.body.textContent = 'Preparando tu pago seguro con Stripe…';
-    }
     setPagando(true);
     setError('');
     try {
@@ -298,24 +282,8 @@ export default function SeatPicker() {
         ficha,
         creadoEn: Date.now(),
       } satisfies CheckoutPendiente));
-      if (popupStripe && !popupStripe.closed) {
-        ventanaStripe.current = popupStripe;
-        popupStripe.location.replace(data.url);
-        if (monitorStripe.current !== null) window.clearInterval(monitorStripe.current);
-        monitorStripe.current = window.setInterval(() => {
-          if (!ventanaStripe.current?.closed) return;
-          if (monitorStripe.current !== null) window.clearInterval(monitorStripe.current);
-          monitorStripe.current = null;
-          ventanaStripe.current = null;
-          void liberarReservaPendiente();
-        }, 750);
-      } else if (popupStripe === null) {
-        window.location.href = data.url;
-      } else {
-        await liberarReservaPendiente();
-      }
+      window.location.href = data.url;
     } catch (err) {
-      if (popupStripe && !popupStripe.closed) popupStripe.close();
       const mensaje = err instanceof Error ? err.message : 'Ocurrió un error, intenta de nuevo';
       if (/ocup|reserv|409/i.test(mensaje)) {
         setError('Uno de esos lugares acaba de ocuparse. Conservamos los que siguen libres para que completes tu grupo.');
