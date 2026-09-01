@@ -132,20 +132,7 @@ export default function Home() {
         <div className="editorial-ribbon"><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span><span>SCIENCE WITH STYLE · SKIN WITH A FUTURE ·</span></div>
       </section>
 
-      <section className="voices ink-section" id="voces">
-        <div className="shell voices-head"><p className="section-tag mint">02 / Protagonistas</p><h2>Quién va a<br /><em>tomar la palabra.</em></h2><p>Conoce a los primeros especialistas confirmados para una conversación contemporánea sobre ciencia, innovación y cuidado de la piel.</p></div>
-        <div className="shell confirmed-speakers" aria-label="Ponentes confirmados">
-          {speakers.map((speaker, index) => (
-            <article className="confirmed-speaker" key={speaker.id} tabIndex={0}>
-              <span className="confirmed-speaker-number" aria-hidden="true">0{index + 1}</span>
-              <img src={speaker.image} alt={`Retrato de ${speaker.name}`} loading="lazy" />
-              <div className="confirmed-speaker-copy"><small>Ponente confirmado</small><h3>{speaker.name}</h3><p>{speaker.role}</p></div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="runway paper-section" id="temas"><div className="shell runway-head"><p className="section-tag">03 / El universo</p><h2>SEIS MIRADAS.<br /><span>UNA MISMA PIEL.</span></h2></div><div className="runway-track">{areas.map((area,index)=><article className="runway-card" key={area.id}><div className={`runway-image real-person real-person-${index+1}`} role="img" aria-label={`Retrato editorial conceptual para ${area.name}`}><b>0{index+1}</b><small>Casting visual</small></div><h3>{area.name}</h3><p>{area.description}</p></article>)}</div><p className="runway-disclaimer shell">Retratos conceptuales generados para comunicar las áreas · No representan ponentes confirmados</p></section>
+      <section className="runway paper-section" id="voces"><div className="shell runway-head"><p className="section-tag">03 / El universo</p><h2>SEIS MIRADAS.<br /><span>UNA MISMA PIEL.</span></h2></div><div className="runway-track">{areas.map((area,index)=><article className="runway-card" key={area.id}><div className={`runway-image real-person real-person-${index+1}`} role="img" aria-label={`Retrato editorial conceptual para ${area.name}`}><b>0{index+1}</b><small>Casting visual</small></div><h3>{area.name}</h3><p>{area.description}</p></article>)}</div><p className="runway-disclaimer shell">Retratos conceptuales generados para comunicar las áreas · No representan ponentes confirmados</p></section>
 
       <section className="pillars ink-section"><div className="shell pillars-grid"><div><p className="section-tag mint">04 / La promesa</p><h2>TRES FORMAS<br />DE HACERLO<br /><em>DIFERENTE.</em></h2></div><div className="pillar-list">{pillars.map(([number,title,text])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p><i>↗</i></article>)}</div></div></section>
 
