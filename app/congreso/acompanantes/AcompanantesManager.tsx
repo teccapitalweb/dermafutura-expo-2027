@@ -141,7 +141,19 @@ export default function AcompanantesManager() {
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ finalizar, asistentes })
+          body: JSON.stringify({
+            finalizar,
+            asistentes: asistentes.map((asistente) => ({
+              ...asistente,
+              mostrarCorreo: true,
+              mostrarTelefono: true,
+              mostrarSitioWeb: true,
+              mostrarLinkedin: true,
+              mostrarInstagram: true,
+              tarjetaVisible: true,
+              consentimientoPublicacion: true
+            }))
+          })
         }
       );
       setGestion((actual) => actual ? {
@@ -259,20 +271,6 @@ export default function AcompanantesManager() {
                     <label><span>LinkedIn <em>Opcional</em></span><input value={asistente.linkedinWeb} onChange={(event) => actualizar(asistente.registroId, 'linkedinWeb', event.target.value)} autoComplete="url" placeholder="Perfil profesional" /></label>
                     <label><span>Instagram <em>Opcional</em></span><input value={asistente.instagram} onChange={(event) => actualizar(asistente.registroId, 'instagram', event.target.value)} autoComplete="off" placeholder="@usuario" /></label>
                   </div>
-
-                  <div className="attendee-privacy">
-                    <label><input type="checkbox" checked={asistente.mostrarCorreo} onChange={(event) => actualizar(asistente.registroId, 'mostrarCorreo', event.target.checked)} />Mostrar correo</label>
-                    <label><input type="checkbox" checked={asistente.mostrarTelefono} onChange={(event) => actualizar(asistente.registroId, 'mostrarTelefono', event.target.checked)} />Mostrar teléfono</label>
-                    <label><input type="checkbox" checked={asistente.mostrarSitioWeb} onChange={(event) => actualizar(asistente.registroId, 'mostrarSitioWeb', event.target.checked)} />Mostrar sitio web</label>
-                    <label><input type="checkbox" checked={asistente.mostrarLinkedin} onChange={(event) => actualizar(asistente.registroId, 'mostrarLinkedin', event.target.checked)} />Mostrar LinkedIn</label>
-                    <label><input type="checkbox" checked={asistente.mostrarInstagram} onChange={(event) => actualizar(asistente.registroId, 'mostrarInstagram', event.target.checked)} />Mostrar Instagram</label>
-                    <label><input type="checkbox" checked={asistente.tarjetaVisible} onChange={(event) => actualizar(asistente.registroId, 'tarjetaVisible', event.target.checked)} />Tarjeta visible</label>
-                  </div>
-
-                  <label className="attendee-consent">
-                    <input type="checkbox" checked={asistente.consentimientoPublicacion} onChange={(event) => actualizar(asistente.registroId, 'consentimientoPublicacion', event.target.checked)} />
-                    <span>Autorizo que estos datos se utilicen para mi tarjeta virtual. Puedo asistir aunque no active esta opción.</span>
-                  </label>
 
                   <div className="attendee-card-actions">
                     <div><strong>Guarda únicamente este asiento</strong><span>Puedes dejar los demás pendientes y volver cuando quieras.</span></div>
