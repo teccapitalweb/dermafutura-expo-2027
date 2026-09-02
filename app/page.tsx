@@ -1,5 +1,6 @@
 import CongresoTickets from './components/CongresoTickets';
 import CongresoPurchaseStatus from './components/CongresoPurchaseStatus';
+import MobileNav from './components/MobileNav';
 import ScheduleList from './components/ScheduleList';
 import areas from '../data/hero-figuras.json';
 import faq from '../data/faq.json';
@@ -62,7 +63,7 @@ function PromoVideo() {
         .promo-film-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
         .promo-film-index{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.05rem .45rem .15rem;color:#c8d9d5;font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
         .promo-film-index strong{color:#50dcc5;font-weight:800}
-        @media(max-width:760px){.promo-film{padding:4.5rem 0}.promo-film-shell{width:min(100% - 28px,1180px)}.promo-film-head{grid-template-columns:1fr;gap:1.7rem;margin-bottom:2rem}.promo-film h2{font-size:clamp(3rem,17vw,5rem);line-height:.9}.promo-film-copy{padding-left:1.1rem}.promo-film-index{align-items:flex-start;flex-direction:column;gap:.45rem;padding:.9rem .35rem .1rem;letter-spacing:.13em}}
+        @media(max-width:760px){.promo-film{padding:4rem 0}.promo-film-shell{width:min(100% - 32px,1180px)}.promo-film-head{grid-template-columns:1fr;gap:1.35rem;margin-bottom:1.75rem}.promo-film-eyebrow{margin-bottom:.9rem;font-size:.62rem}.promo-film h2{font-size:clamp(2.8rem,15vw,4.5rem);line-height:.88}.promo-film-copy{padding-left:1rem}.promo-film-copy p{font-size:.98rem;line-height:1.6}.promo-film-index{align-items:flex-start;flex-direction:column;gap:.42rem;padding:.85rem .3rem .05rem;letter-spacing:.12em}}
       `}</style>
       <div className="promo-film-shell">
         <div className="promo-film-head">
@@ -105,6 +106,7 @@ export default function Home() {
         <a className="brand" href="#inicio" aria-label="BIO SKIN Congress, inicio"><img className="brand-logo" src="/images/logo-bioskin.jpeg" alt="BIO SKIN Congress 2026" /></a>
         <nav className="nav-links" aria-label="Navegación principal"><a href="#voces">Voces</a><a href="#programa">Programa</a><a href="#pases">Pases</a><a href="#sede">Sede</a></nav>
         <a className="nav-cta" href="#interes">Únete a la lista</a>
+        <MobileNav />
       </header>
 
       <section className="hero" id="inicio">
