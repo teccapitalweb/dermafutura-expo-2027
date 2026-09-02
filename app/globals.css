@@ -374,17 +374,18 @@ footer { overflow:hidden; padding:110px 0 30px; background:var(--ink); }
   .brand-logo { height:46px; border-radius:11px; padding:4px 7px; }
   .nav-cta { display:none; }
   .mobile-nav { position:relative; display:block; justify-self:end; }
-  .mobile-nav button { display:flex; min-width:86px; height:44px; align-items:center; justify-content:center; gap:9px; border:1px solid rgba(255,255,255,.18); border-radius:15px; background:rgba(255,255,255,.06); color:#fff; font-size:8px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; }
+  .mobile-nav-toggle { position:relative; z-index:9; display:flex; min-width:86px; height:44px; align-items:center; justify-content:center; gap:9px; border:1px solid rgba(255,255,255,.18); border-radius:15px; background:rgba(255,255,255,.06); color:#fff; font-size:8px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; }
   .mobile-nav-icon { display:grid; width:17px; gap:3px; }
   .mobile-nav-icon i { display:block; height:1px; border-radius:2px; background:var(--mint); transition:transform .2s ease,opacity .2s ease; }
   .mobile-nav.is-open .mobile-nav-icon i:first-child { transform:translateY(4px) rotate(45deg); }.mobile-nav.is-open .mobile-nav-icon i:nth-child(2) { opacity:0; }.mobile-nav.is-open .mobile-nav-icon i:last-child { transform:translateY(-4px) rotate(-45deg); }
-  .mobile-nav-panel { position:absolute; z-index:5; top:calc(100% + 9px); right:0; display:grid; width:min(270px,calc(100vw - 20px)); overflow:hidden; border:1px solid rgba(127,230,194,.24); border-radius:18px; background:rgba(5,17,14,.97); box-shadow:0 24px 55px rgba(0,0,0,.45); backdrop-filter:blur(22px); }
+  .mobile-nav-backdrop { position:fixed; z-index:999; inset:0; border:0; background:rgba(0,10,8,.48); backdrop-filter:blur(2px); touch-action:none; }
+  .mobile-nav-panel { position:fixed; z-index:1000; top:calc(max(8px,env(safe-area-inset-top)) + 71px); right:10px; display:grid; width:min(270px,calc(100vw - 20px)); overflow:hidden; border:1px solid rgba(127,230,194,.24); border-radius:18px; background:rgba(5,17,14,.97); box-shadow:0 24px 55px rgba(0,0,0,.45); backdrop-filter:blur(22px); }
   .mobile-nav-panel a { display:flex; min-height:47px; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.08); padding:0 17px; color:rgba(255,255,255,.76); font-size:9px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
   .mobile-nav-panel a::after { content:'↗'; color:var(--mint); }.mobile-nav-panel a:last-child { border:0; background:var(--mint); color:var(--ink); }.mobile-nav-panel a:last-child::after { color:var(--ink); }
   .hero { min-height:max(760px,100svh); }.hero-editorial { min-height:max(760px,100svh); padding-top:86px; }
   .hero-word { left:0; font-size:clamp(76px,26vw,108px); letter-spacing:-.09em; }.hero-word-one { top:15%; }.hero-word-two { top:26%; -webkit-text-stroke-width:1px; }
   .hero-word-three { top:40%; bottom:auto; left:0; font-size:clamp(18px,5.1vw,22px); letter-spacing:.095em; }
-  .hero-cta { top:55%; right:0; bottom:auto; }.hero-actions { flex-wrap:nowrap; gap:8px; }.hero-actions .button { flex:1; min-height:44px; padding-inline:8px; font-size:7.2px; letter-spacing:.085em; }
+  .hero-cta { top:52%; right:0; bottom:auto; }.hero-actions { flex-wrap:nowrap; gap:8px; }.hero-actions .button { flex:1; min-height:44px; padding-inline:8px; font-size:7.2px; letter-spacing:.085em; }
   .hero-cast { top:63%; right:-2vw; bottom:auto; width:96vw; height:34%; }
   .hero-speaker-label { bottom:6%; width:min(230px,82vw); padding:12px 14px; }.hero-speaker-label strong { font-size:18px; line-height:1; }.hero-speaker-zone-1 .hero-speaker-label { right:auto; left:0; }.hero-speaker-zone-2 .hero-speaker-label { right:auto; left:50%; transform:translate(-50%,14px); }.hero-speaker-zone-2:hover .hero-speaker-label,.hero-speaker-zone-2:focus-visible .hero-speaker-label { transform:translate(-50%,0); }.hero-speaker-zone-3 .hero-speaker-label { right:0; }
   .hero-footnote { bottom:0; padding:9px 74px 9px 8px; background:rgba(12,7,10,.82); font-size:5.5px; line-height:1.45; }
